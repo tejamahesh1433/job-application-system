@@ -1,0 +1,145 @@
+{
+  "jobs": {
+    "af4e97ed4c44b411af3ff276": {
+      "discovery_status": "removed",
+      "job": {
+        "ats": "70%",
+        "company": "agex IT gmbh",
+        "company_size": "Not listed",
+        "description": "For a project we are looking for a Senior Python Developer (f/m/d). Aufgaben Data Integration and Processing \u2022 analysis and implementation of defined data ingestion and processing components as part of agreed deliverables (e.g. input and output data used in system operations) \u2022 design, refinement and implementation of automated data import routines as part of defined work packages, including documentation, parsing, validation, error handling and handover \u2022 design and evolution of database structures and data models \u2022 analytical support activities limited to the scope of agreed deliverables and project objective Transparency, Dashboards, and Monitoring \u2022 development and enhancement of dashboards and visualizations displaying operational KPIs and metrics, including documentation and handover \u2022 implementation of comparison views, trend analysis, and anomaly detection logic based on agreed requirements \u2022 configuration of notification and alerting mechanisms in case of detected deviations \u2022 generation of analytical outputs and reports Technical Engineering \u2022 Provision of senior-level Python full-stack engineering and consulting services within the agreed technology landscape \u2022 Deploymen",
+        "founded": "Not listed",
+        "id": "af4e97ed4c44b411af3ff276",
+        "industry": "Remote",
+        "interview_prob": "73%",
+        "is_live": true,
+        "job_type": "Not specified",
+        "location": "Kiel",
+        "match": "86%",
+        "posted": "16h 58m ago",
+        "posted_exact": "Jun 4, 2026 \u00b7 07:30 UTC",
+        "salary": "Not listed",
+        "skills_matched": [
+          "Python"
+        ],
+        "skills_missing": [
+          "AWS",
+          "Docker",
+          "Kubernetes"
+        ],
+        "source": "Arbeitnow",
+        "tech_stack": [
+          "Remote",
+          "IT",
+          "Python"
+        ],
+        "title": "Senior Python Developer (f/m/d) wanted! Ref.Nr. 4183!",
+        "url": "https://www.arbeitnow.com/jobs/companies/agex-it-gmbh/senior-python-developer-wanted-refnr-4183-kiel-429862",
+        "warnings": [
+          "Salary not listed"
+        ],
+        "work_type": "Remote"
+      },
+      "last_seen_at": "2026-06-05T00:29:16.198764+00:00",
+      "saved_at": "2026-06-05T00:29:16.198764+00:00",
+      "updated_at": "2026-06-05T00:29:30.943077+00:00",
+      "user_id": 1
+    },
+    "e532dcdd55359bdd0da8360d": {
+      "discovery_status": "removed",
+      "job": {
+        "ats": "70%",
+        "company": "Plan.tec. GmbH & Co. KG",
+        "company_size": "Not listed",
+        "description": "Du liebst saubere Datenstrukturen, offene Systeme und willst nicht nur Code schreiben \u2013 sondern etwas aufbauen, das bleibt? Dann bist du bei uns genau richtig. Wir sind ein mittelst\u00e4ndisches Unternehmen aus Garbsen, das gerade an einem spannenden Scheidepunkt steht \u2013 und suchen jemanden, der diesen Weg mit uns geht. Wir sind kein Konzern. Wir sind ein eingespieltes Team, das seit Jahren mit ERP-Systemen arbeitet, sie versteht \u2013 und jetzt den n\u00e4chsten Schritt geht. Open Source ist f\u00fcr uns keine Modeerscheinung, sondern \u00dcberzeugung. Wir setzen auf ERPNext, lokale KI-Systeme und die Freiheit, Dinge wirklich selbst in die Hand zu nehmen. Unser Ziel: eigenes Wissen aufbauen, unabh\u00e4ngig werden \u2013 und dieses Wissen perspektivisch auch f\u00fcr Kunden nutzbar machen. Aufgaben ERPNext aufbauen, anpassen und weiterentwickeln Datenbankstrukturen analysieren, optimieren und pflegen Python-Skripte schreiben, die wirklich gebraucht werden Lokale KI-Tools integrieren und sinnvoll einsetzen Schnittstellen entwickeln \u2013 sauber, stabil, durchdacht Perspektivisch: unser ERP-Wissen mit in Kundenprojekte einbringen Qualifikation Fundierte Kenntnisse in ERPNext / Frappe Framework Sicherer Umgang mit Datenbanke",
+        "founded": "Not listed",
+        "id": "e532dcdd55359bdd0da8360d",
+        "industry": "SAP/ERP Consulting",
+        "interview_prob": "69%",
+        "is_live": true,
+        "job_type": "berufserfahren",
+        "location": "Garbsen",
+        "match": "78%",
+        "posted": "10h 28m ago",
+        "posted_exact": "Jun 4, 2026 \u00b7 14:00 UTC",
+        "salary": "Not listed",
+        "skills_matched": [
+          "Python"
+        ],
+        "skills_missing": [
+          "AWS",
+          "Docker",
+          "Kubernetes"
+        ],
+        "source": "Arbeitnow",
+        "tech_stack": [
+          "SAP/ERP Consulting",
+          "Development",
+          "Python"
+        ],
+        "title": "ERPNext & Database Wizard (m/w/d)",
+        "url": "https://www.arbeitnow.com/jobs/companies/plantec-gmbh-co-kg/erpnext-database-wizard-garbsen-272197",
+        "warnings": [
+          "Salary not listed"
+        ],
+        "work_type": "Onsite"
+      },
+      "last_seen_at": "2026-06-05T00:29:16.198764+00:00",
+      "saved_at": "2026-06-05T00:29:16.198764+00:00",
+      "updated_at": "2026-06-05T00:29:30.955921+00:00",
+      "user_id": 1
+    }
+  },
+  "searches": {
+    "19e80d791e14f3873e3ff295": {
+      "job_ids": [],
+      "params": {
+        "country": "United States",
+        "experience": "",
+        "job_type": "all",
+        "keyword": "DevOps Engineer",
+        "location": "Remote",
+        "role_type": "",
+        "salary_min": "0",
+        "source": "remotive",
+        "work_type": "remote"
+      },
+      "searched_at": "2026-06-05T00:28:53.499053+00:00",
+      "user_id": 1
+    },
+    "63659479cc3c136962db5f8d": {
+      "job_ids": [],
+      "params": {
+        "country": "United States",
+        "experience": "",
+        "job_type": "all",
+        "keyword": "software engineer",
+        "location": "Remote",
+        "role_type": "",
+        "salary_min": "0",
+        "source": "remotive",
+        "work_type": "remote"
+      },
+      "searched_at": "2026-06-05T00:29:05.933885+00:00",
+      "user_id": 1
+    },
+    "dd34153546fe9ff3722d6a54": {
+      "job_ids": [
+        "af4e97ed4c44b411af3ff276",
+        "e532dcdd55359bdd0da8360d"
+      ],
+      "params": {
+        "country": "United States",
+        "experience": "",
+        "job_type": "all",
+        "keyword": "python",
+        "location": "Remote",
+        "role_type": "",
+        "salary_min": "0",
+        "source": "arbeitnow",
+        "work_type": "all"
+      },
+      "searched_at": "2026-06-05T00:29:16.198764+00:00",
+      "user_id": 1
+    }
+  }
+}

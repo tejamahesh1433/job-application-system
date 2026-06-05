@@ -1,0 +1,25 @@
+<div class="pgh">
+    <div><div class="pgtit">Applications</div><div class="pgsub">Full history with status tracking</div></div>
+    <button class="btn bpri bsm" onclick="sp('new',document.querySelectorAll('.ni')[3])">+ New Application</button>
+  </div>
+  <div class="fbar">
+    <input class="finp" type="text" placeholder="Search company or role..." id="fq" oninput="fapps()">
+    <select class="fsel2" id="fst" onchange="fapps()">
+      <option value="">All Status</option>
+      <option value="pending">Pending</option>
+      <option value="submitted">Applied</option>
+      <option value="interview">Interviewing</option>
+      <option value="offered">Offered</option>
+      <option value="rejected">Rejected</option>
+    </select>
+    <button class="btn bsec bsm" onclick="lapps()">
+      <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13.5 8A5.5 5.5 0 1 1 8 2.5"/><path d="M14 2v4h-4"/></svg>
+      Refresh
+    </button>
+  </div>
+  <div class="panel">
+    <table class="dt">
+      <thead><tr><th>Company</th><th>Role</th><th>Match</th><th>Status</th><th>Applied</th><th>Actions</th></tr></thead>
+      <tbody id="atb"><tr><td colspan="6"><div class="empty"><div class="spin" style="margin:0 auto 8px"></div><div class="et">Loading...</div></div></td></tr></tbody>
+    </table>
+  </div>

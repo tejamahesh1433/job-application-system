@@ -1,0 +1,69 @@
+<div class="pgh">
+    <div>
+      <div class="pgtit">Job Discovery</div>
+      <div class="pgsub">Real jobs from Remotive &amp; Arbeitnow — no API key required</div>
+    </div>
+  </div>
+
+  <div class="jd-search">
+    <div class="j-kw-wrap">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M12 12l2.5 2.5"/></svg>
+      <input class="j-inp" id="j-kw" type="text" placeholder="DevOps Engineer, SRE, Platform Engineer..." value="DevOps Engineer">
+    </div>
+    <select class="j-sel" id="j-loc">
+      <option value="Anywhere in USA">🇺🇸 Anywhere in USA</option>
+      <option value="Remote">🌐 Remote (US/Global)</option>
+      <option value="San Francisco">San Francisco, CA</option>
+      <option value="New York">New York, NY</option>
+      <option value="Austin">Austin, TX</option>
+      <option value="Seattle">Seattle, WA</option>
+      <option value="Chicago">Chicago, IL</option>
+      <option value="Boston">Boston, MA</option>
+      <option value="Denver">Denver, CO</option>
+      <option value="Atlanta">Atlanta, GA</option>
+    </select>
+    <select class="j-sel" id="j-wt">
+      <option value="all">🏢 All Types</option>
+      <option value="remote">🌐 Remote Only</option>
+      <option value="onsite">🏢 On-site</option>
+    </select>
+    <select class="j-sel" id="j-jt">
+      <option value="all">📋 All Jobs</option>
+      <option value="full-time">Full Time</option>
+      <option value="contract">Contract</option>
+    </select>
+    <select class="j-sel" id="j-src">
+      <option value="">Free Sources</option>
+      <option value="remotive">Remotive Only</option>
+      <option value="arbeitnow">Arbeitnow Only</option>
+      <option value="jsearch">JSearch Paid</option>
+    </select>
+    <button class="btn bpri" onclick="searchJobs(false)" id="search-btn">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="7" r="5"/><path d="M12 12l2.5 2.5"/></svg>
+      Search Jobs
+    </button>
+    <button class="btn bsec" onclick="searchJobs(true)" id="refresh-search-btn" title="Run providers again for these filters">
+      Refresh Search
+    </button>
+  </div>
+
+  <div class="jd-status" id="jd-status" style="display:none">
+    <span class="live-pill"><span class="bd"></span>LIVE</span>
+    <span id="jd-count">— jobs found</span>
+    <span style="color:var(--bord-b)">•</span>
+    <span id="jd-sources">—</span>
+    <span style="color:var(--bord-b)">•</span>
+    <span style="font-family:var(--mono);font-size:9px;color:var(--t3)">🇺🇸 US &amp; Remote Only</span>
+    <span style="margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--t3)" id="jd-time">—</span>
+  </div>
+
+  <div id="jobs-container">
+    <div class="empty" id="jd-empty">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".3">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <div class="et">Search for jobs above to find real openings.</div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:6px">Sources: Remotive · Arbeitnow — updated in real time</div>
+    </div>
+    <div class="jobs-grid" id="jobs-grid" style="display:none"></div>
+  </div>

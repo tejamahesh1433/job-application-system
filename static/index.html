@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>APEX — Job Application Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="brand">
+    <div><div class="brand-w">APEX</div><div class="brand-s">Application Engine</div></div>
+  </div>
+  <div class="ag-bar">
+    <div class="ag-pill"><span class="ag-d on"></span>Profile</div>
+    <div class="ag-pill"><span class="ag-d on"></span>Job Analysis</div>
+    <div class="ag-pill"><span class="ag-d on"></span>Resume</div>
+    <div class="ag-pill"><span class="ag-d on"></span>Matching</div>
+    <div class="ag-pill"><span class="ag-d on"></span>Writing</div>
+    <div class="ag-pill"><span class="ag-d on"></span>Tracking</div>
+    <div class="ag-pill"><span class="ag-d idle"></span>Browser</div>
+    <div style="width:1px;height:20px;background:var(--bord);margin:0 8px"></div>
+    <div class="ag-pill" id="llm-pill" onclick="sp('settings',document.querySelectorAll('.ni')[7])" style="cursor:pointer;border:1px solid var(--bord);border-radius:6px;padding:3px 10px;gap:6px">
+      <span class="ag-d" id="llm-dot"></span>
+      <span style="font-size:9px;color:var(--t3)" id="llm-label">LLM loading...</span>
+      <span style="font-family:var(--mono);font-size:8px;color:var(--t3)" id="llm-cost"></span>
+    </div>
+  </div>
+  <div class="tb-r">
+    <div class="api-chip" id="api-chip" onclick="hcheck()">
+      <span class="spin" id="hcspin" style="display:none"></span>
+      <span id="hcdot" style="width:6px;height:6px;border-radius:50%;background:var(--t3);flex-shrink:0;transition:background .3s"></span>
+      <span id="hctxt">Connecting...</span>
+    </div>
+    <div id="clk">--:--:--</div>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="ns">
+    <span class="nl">Navigation</span>
+    <div class="ni active" onclick="sp('overview',this)">
+      <svg class="ni-ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/>
+        <rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/>
+      </svg>
+      <span>Overview</span>
+    </div>
+    <div class="ni" onclick="sp('discover',this)">
+      <svg class="ni-ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="7" cy="7" r="5"/><path d="M12 12l2.5 2.5"/>
+      </svg>
+      <span>Job Discovery</span>
+      <span class="nbadge" id="live-cnt" style="background:var(--ok-d);color:var(--ok);border-color:rgba(34,197,94,.25)">LIVE</span>
+    </div>
+    <div class="ni" onclick="sp('apps',this)">
+      <svg class="ni-ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M2 4h12M2 8h8M2 12h10"/>
+      </svg>
+      <span>Applications</span>
+      <span class="nbadge" id="acnt">0</span>
+    </div>
+    <div class="ni" onclick="sp('new',this)">
+      <svg class="ni-ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="8" cy="8" r="7"/><path d="M8 5v6M5 8h6"/>
+      </svg>
+      <span>New Application</span>
+    </div>
+    <div class="ni" onclick="sp('profile',this)">
+      <svg class="ni-ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+      </svg>
+      <span>Profile</span>
+    </div>
+  </div>
+  <div class="ns" style="margin-top:8px">
+    <span class="nl">Tools</span>
+    <div class="ni" onclick="sp('analytics',this)">
+      <svg class="ni-ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M2 12 L5 7 L8 9 L11 4 L14 6"/><path d="M2 14h12"/>
+      </svg>
+      <span>Analytics</span>
+    </div>
+    <div class="ni" onclick="sp('documents',this)">
+      <svg class="ni-ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M4 1.5h5l3 3V14.5H4z"/><path d="M9 1.5v3h3"/><path d="M6 8h4M6 10.5h4"/>
+      </svg>
+      <span>Documents</span>
+    </div>
+    <div class="ni" onclick="sp('settings',this)">
+      <svg class="ni-ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="8" cy="8" r="2.5"/>
+        <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M11.54 4.46l-1.41 1.41M4.46 11.54l-1.41 1.41"/>
+      </svg>
+      <span>Settings</span>
+    </div>
+  </div>
+  <div class="sb-bot">
+    <div class="sys-b">
+      <div class="sys-l">System Health</div>
+      <div class="sr"><span class="sk">API</span><div class="bt"><div class="bf" id="sh1" style="width:0%"></div></div><span class="sv" id="sv1">—</span></div>
+      <div class="sr"><span class="sk">DB</span><div class="bt"><div class="bf" id="sh2" style="width:0%"></div></div><span class="sv" id="sv2">—</span></div>
+      <div class="sr"><span class="sk">LLM</span><div class="bt"><div class="bf w" id="sh3" style="width:0%"></div></div><span class="sv" id="sv3">—</span></div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ─── OVERVIEW ─── -->
+<div class="page active" id="page-overview"></div>
+
+
+<!-- ─── JOB DISCOVERY ─── -->
+<div class="page" id="page-discover"></div>
+
+
+<!-- ─── APPLICATIONS ─── -->
+<div class="page" id="page-apps"></div>
+
+
+<!-- ─── NEW APPLICATION ─── -->
+<div class="page" id="page-new"></div>
+
+
+<!-- ─── PROFILE ─── -->
+<div class="page" id="page-profile"></div>
+
+
+<!-- ─── ANALYTICS ─── -->
+<div class="page" id="page-analytics"></div>
+
+
+<!-- ─── DOCUMENTS ─── -->
+<div class="page" id="page-documents"></div>
+
+
+  <!-- ─── SETTINGS ─── -->
+  <div class="page" id="page-settings"></div>
+
+
+</main>
+</div>
+<div id="toasts"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

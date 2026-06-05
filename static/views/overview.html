@@ -1,0 +1,73 @@
+<div class="pgh">
+    <div><div class="pgtit">Mission Overview</div><div class="pgsub" id="tdate">LOADING...</div></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn bsec bsm" onclick="ldash()">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13.5 8A5.5 5.5 0 1 1 8 2.5"/><path d="M14 2v4h-4"/></svg>
+        Refresh
+      </button>
+      <button class="btn bpri bsm" onclick="sp('discover',document.querySelectorAll('.ni')[1])">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="7" r="5"/><path d="M12 12l2.5 2.5"/></svg>
+        Find Jobs
+      </button>
+    </div>
+  </div>
+  <div class="srow">
+    <div class="sc">
+      <div class="slbl">Total Applications</div>
+      <div class="snum" id="st">0</div>
+      <div class="spro"><div class="pt"><div class="pf" id="pp1" style="width:0%"></div></div><span class="smeta" id="sm1">/ 25 daily goal</span></div>
+      <div class="smeta" id="sm2" style="margin-top:4px">Loading...</div>
+    </div>
+    <div class="sc">
+      <div class="slbl">Average Match Score</div>
+      <div class="snum acc" id="sm">0%</div>
+      <div class="spro"><div class="pt"><div class="pf g" id="pp2" style="width:0%"></div></div></div>
+      <div class="smeta" style="margin-top:4px">Target: 80%+</div>
+    </div>
+    <div class="sc">
+      <div class="slbl">Interviews Scheduled</div>
+      <div class="snum grn" id="si">0</div>
+      <div class="spro"><div class="pt"><div class="pf g" id="pp3" style="width:0%"></div></div></div>
+      <div class="smeta" id="sm3" style="margin-top:4px">Loading...</div>
+    </div>
+    <div class="sc">
+      <div class="slbl">Response Rate</div>
+      <div class="snum" id="sr">0%</div>
+      <div class="spro"><div class="pt"><div class="pf" id="pp4" style="width:0%"></div></div></div>
+      <div class="smeta" style="margin-top:4px">Target: 25%+</div>
+    </div>
+  </div>
+  <div class="cg">
+    <div class="panel">
+      <div class="ph">
+        <div class="ptl"><span class="pd"></span>Recent Applications</div>
+        <div class="pa"><button class="btn bghost bsm" onclick="sp('apps',document.querySelectorAll('.ni')[2])">View all →</button></div>
+      </div>
+      <table class="dt">
+        <thead><tr><th>Company</th><th>Role</th><th>Match</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody id="rec-tb"><tr><td colspan="5"><div class="empty"><div class="spin" style="margin:0 auto 8px"></div><div class="et">Loading...</div></div></td></tr></tbody>
+      </table>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="panel">
+        <div class="ph">
+          <div class="ptl"><span class="pd live"></span>Processing Queue</div>
+          <span class="badge processing" id="qbadge"><span class="bd"></span>0 ACTIVE</span>
+        </div>
+        <div id="qlist">
+          <div class="empty"><div class="et">No active processing jobs.</div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="ph">
+          <div class="ptl"><span class="pd ok"></span>Your Profile</div>
+          <button class="btn bghost bsm" onclick="sp('profile',document.querySelectorAll('.ni')[4])">Edit →</button>
+        </div>
+        <div class="pm">
+          <div class="pmt"><div class="pmav" id="mav">T</div><div><div class="pmnm" id="mnm">Loading...</div><div class="pmtl" id="mtl">—</div></div></div>
+          <div><div class="cpr"><span class="cpl">Profile Completeness</span><span class="cpp" id="mcp">—</span></div><div class="bt" style="height:4px"><div class="bf" id="mcpb" style="width:0%;background:var(--ok)"></div></div></div>
+          <div class="skw" id="msk"><span class="skt" style="color:var(--t3)">Loading skills...</span></div>
+        </div>
+      </div>
+    </div>
+  </div>

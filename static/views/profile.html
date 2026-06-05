@@ -1,0 +1,59 @@
+<div class="pgh">
+    <div><div class="pgtit">Your Profile</div><div class="pgsub">Professional information and skills</div></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn bsec bsm" onclick="lprof()">Reload</button>
+      <button class="btn bpri bsm" onclick="sprof()">Save Changes</button>
+    </div>
+  </div>
+  <div class="ppg">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="panel" style="padding:20px 18px">
+        <div class="plav" id="plav">T</div>
+        <div style="font-size:16px;font-weight:600" id="pnm">Loading...</div>
+        <div style="font-size:12px;color:var(--t2);margin-top:3px" id="ptl">—</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px" id="plc">—</div>
+        <div class="div"></div>
+        <div style="font-size:11px;color:var(--t2)">Profile Completeness</div>
+        <div style="display:flex;justify-content:space-between;margin:5px 0 4px"><span class="fh" style="margin:0">Based on filled fields</span><span style="font-family:var(--mono);font-size:10px;color:var(--ok)" id="pcpp">—</span></div>
+        <div class="bt" style="height:4px"><div class="bf" id="pcpb" style="width:0%;background:var(--ok)"></div></div>
+        <div class="psr">
+          <div class="psb"><div class="psbn" id="pexp">—</div><div class="psbl">YRS EXP</div></div>
+          <div class="psb"><div class="psbn" id="pskc">—</div><div class="psbl">SKILLS</div></div>
+          <div class="psb"><div class="psbn" id="pcrt">—</div><div class="psbl">CERTS</div></div>
+        </div>
+      </div>
+      <div class="panel" style="padding:16px 18px">
+        <div style="font-family:var(--mono);font-size:8.5px;letter-spacing:.15em;color:var(--t3);text-transform:uppercase;margin-bottom:10px">Upload Resume</div>
+        <input type="file" id="rfile" accept=".pdf,.docx" style="display:none" onchange="upres()">
+        <button class="btn bsec" style="width:100%" onclick="document.getElementById('rfile').click()">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 11V2M4 6l4-4 4 4"/><path d="M2 13h12"/></svg>
+          Choose PDF or DOCX
+        </button>
+        <div class="fh" style="margin-top:6px">Saved to /resumes/ — AI parses on next run</div>
+      </div>
+    </div>
+    <div class="panel" style="padding:22px">
+      <div style="font-family:var(--mono);font-size:8.5px;letter-spacing:.15em;color:var(--t3);text-transform:uppercase;margin-bottom:16px">Edit Profile</div>
+      <div class="fr2">
+        <div class="fg"><label class="fl">Full Name</label><input class="fi" type="text" id="enm" placeholder="John Doe"></div>
+        <div class="fg"><label class="fl">Email</label><input class="fi" type="email" id="eem" placeholder="john@example.com"></div>
+      </div>
+      <div class="fr2">
+        <div class="fg"><label class="fl">Current Title</label><input class="fi" type="text" id="etl" placeholder="Senior DevOps Engineer"></div>
+        <div class="fg"><label class="fl">Location</label><input class="fi" type="text" id="eloc" placeholder="San Francisco, CA"></div>
+      </div>
+      <div class="fr2">
+        <div class="fg"><label class="fl">Current Company</label><input class="fi" type="text" id="eco" placeholder="Acme Corp"></div>
+        <div class="fg"><label class="fl">Years Experience</label><input class="fi" type="number" id="eexp" placeholder="5" min="0" max="50"></div>
+      </div>
+      <div class="div"></div>
+      <div class="fr2">
+        <div class="fg"><label class="fl">GitHub</label><input class="fi" type="url" id="egh" placeholder="https://github.com/username"></div>
+        <div class="fg"><label class="fl">LinkedIn</label><input class="fi" type="url" id="eli" placeholder="https://linkedin.com/in/username"></div>
+      </div>
+      <div class="fg"><label class="fl">Portfolio</label><input class="fi" type="url" id="eprt" placeholder="https://yoursite.com"></div>
+      <div class="div"></div>
+      <div style="font-family:var(--mono);font-size:8.5px;letter-spacing:.15em;color:var(--t3);text-transform:uppercase;margin-bottom:8px">Skills</div>
+      <div class="skw" id="pskd"><span class="skt" style="color:var(--t3)">Load profile to see skills</span></div>
+    </div>
+  </div>

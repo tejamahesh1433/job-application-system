@@ -1,0 +1,43 @@
+<div class="pgh">
+    <div><div class="pgtit">Documents</div><div class="pgsub">Uploaded resumes, tailored resumes, and cover letters</div></div>
+    <button class="btn bpri bsm" onclick="ldocs()">Refresh Files</button>
+  </div>
+  <div class="panel" style="overflow:hidden">
+    <div style="display:grid;grid-template-columns:240px minmax(0,1fr) 380px;min-height:560px">
+      <aside style="border-right:1px solid var(--bord);padding:16px;background:rgba(12,16,26,.35)">
+        <input type="file" id="doc-upload" accept=".pdf,.docx,.txt,.md" style="display:none" onchange="uploadDocResume(this.files?.[0]);this.value=''">
+        <div class="fg" style="margin-bottom:12px">
+          <label class="fl">Search Files</label>
+          <input class="fi" id="doc-q" placeholder="Company, role, filename..." oninput="clearTimeout(window._docTimer);window._docTimer=setTimeout(ldocs,180)">
+        </div>
+        <div class="docf active" data-cat="all" onclick="docCat('all',this)"><span>All Files</span><b id="dc-all">0</b></div>
+        <div class="docf" data-cat="uploaded_resumes" onclick="docCat('uploaded_resumes',this)"><span>Uploaded Resumes</span><b id="dc-uploaded_resumes">0</b></div>
+        <div class="docf" data-cat="tailored_resumes" onclick="docCat('tailored_resumes',this)"><span>Tailored Resumes</span><b id="dc-tailored_resumes">0</b></div>
+        <div class="docf" data-cat="cover_letters" onclick="docCat('cover_letters',this)"><span>Cover Letters</span><b id="dc-cover_letters">0</b></div>
+        <button class="btn bpri bsm" style="width:100%;margin-top:10px" onclick="g('doc-upload').click()">+ Add Resume</button>
+      </aside>
+      <section style="padding:16px;border-right:1px solid var(--bord);min-width:0">
+        <div id="docs-list" style="display:flex;flex-direction:column;gap:10px"></div>
+      </section>
+      <aside style="padding:16px;background:rgba(5,8,14,.22)">
+        <div id="doc-empty" class="empty" style="padding-top:80px"><div class="et">Select a file to preview it.</div></div>
+        <div id="doc-prev" style="display:none">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px">
+            <div style="min-width:0">
+              <div id="dp-title" style="font-weight:700;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+              <div id="dp-meta" style="font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:5px"></div>
+            </div>
+            <span class="badge live" id="dp-type">FILE</span>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:12px">
+            <a class="btn bpri bsm" id="dp-down" target="_blank" rel="noopener">Download</a>
+            <button class="btn bsec bsm" onclick="renameDoc()">Rename</button>
+            <button class="btn bsec bsm" id="dp-save" onclick="saveDocText()">Save Text</button>
+            <button class="btn bsec bsm" onclick="copyDocPreview()">Copy Text</button>
+            <button class="btn bghost bsm" style="color:var(--err)" onclick="deleteDoc()">Delete</button>
+          </div>
+          <textarea id="dp-body" style="white-space:pre-wrap;width:100%;min-height:430px;max-height:430px;resize:vertical;overflow:auto;border:1px solid var(--bord);border-radius:8px;padding:12px;background:rgba(0,0,0,.22);font-family:var(--mono);font-size:10px;line-height:1.55;color:var(--t2)"></textarea>
+        </div>
+      </aside>
+    </div>
+  </div>

@@ -1,0 +1,55 @@
+<div class="pgh">
+      <div><div class="pgtit">Settings</div><div class="pgsub">LLM configuration, API keys, and system preferences</div></div>
+      <button class="btn bpri bsm" onclick="lsettings()">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M13.5 8A5.5 5.5 0 1 1 8 2.5"/><path d="M14 2v4h-4"/>
+        </svg>
+        Refresh Status
+      </button>
+    </div>
+
+    <!-- LLM Provider Status -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px" id="llm-cards">
+      <!-- filled by JS -->
+    </div>
+
+    <!-- Installed Models -->
+    <div class="panel" style="margin-bottom:14px">
+      <div class="ph">
+        <div class="ptl"><span class="pd live"></span>Installed Ollama Models</div>
+        <div class="pa">
+          <span id="active-model-badge" style="font-family:var(--mono);font-size:9px;color:var(--t3)">Loading...</span>
+        </div>
+      </div>
+      <div id="installed-models-list" style="padding:14px 18px">
+        <div class="empty"><div class="et">Loading models...</div></div>
+      </div>
+    </div>
+
+    <!-- Recommended Models -->
+    <div class="panel" style="margin-bottom:14px">
+      <div class="ph">
+        <div class="ptl"><span class="pd"></span>Recommended Models for DevOps Jobs</div>
+        <div class="pa">
+          <span style="font-family:var(--mono);font-size:9px;color:var(--t3)">RTX 5080 can run all of these</span>
+        </div>
+      </div>
+      <div id="rec-models-list" style="padding:0">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- Quick Setup -->
+    <div class="panel">
+      <div class="ph"><div class="ptl"><span class="pd ok"></span>Quick Setup Commands</div></div>
+      <div style="padding:18px">
+        <div style="font-family:var(--mono);font-size:9.5px;color:var(--t2);margin-bottom:12px">Run these in PowerShell to get started with 100% free local AI:</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="setup-cmd" onclick="copyCmd(this)">ollama serve</div>
+          <div class="setup-cmd" onclick="copyCmd(this)">ollama pull mistral</div>
+          <div class="setup-cmd" onclick="copyCmd(this)">ollama pull llama3.2</div>
+          <div class="setup-cmd" onclick="copyCmd(this)">ollama list</div>
+        </div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:12px">Click any command to copy · Your RTX 5080 runs these at full speed with 0 latency</div>
+      </div>
+    </div>

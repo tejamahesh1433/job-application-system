@@ -1,0 +1,44 @@
+<div class="pgh">
+    <div><div class="pgtit">New Application</div><div class="pgsub">Paste a job URL or description — AI handles the rest</div></div>
+  </div>
+  <div class="fw">
+    <div class="panel" style="padding:22px">
+      <div class="fg"><label class="fl">Job URL</label><input class="fi" type="url" id="jurl" placeholder="https://remotive.com/remote-jobs/..."></div>
+      <div class="fg"><label class="fl">Job Content (HTML or plain text)</label><textarea class="fta" id="jcont" rows="5" placeholder="Paste the full job description here..."></textarea><div class="fh">Copy the full page source or paste the description</div></div>
+      <div class="fr2">
+        <div class="fg"><label class="fl">Source</label>
+          <select class="fsel" id="jsrc"><option value="linkedin">LinkedIn</option><option value="remotive">Remotive</option><option value="arbeitnow">Arbeitnow</option><option value="indeed">Indeed</option><option value="company">Company Career Page</option><option value="other">Other</option></select>
+        </div>
+        <div class="fg"><label class="fl">Resume Mode</label>
+          <select class="fsel" id="rmode"><option value="balanced">Balanced (Recommended)</option><option value="conservative">Conservative — 90% original</option><option value="aggressive">Aggressive — ATS keyword push</option></select>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:4px">
+        <button class="btn bpri" id="pbtn" onclick="papp()">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M6 8h4M8 6v4"/></svg>
+          Analyze &amp; Process
+        </button>
+        <button class="btn bsec bsm" onclick="cform()">Clear</button>
+        <span id="pstat" style="font-family:var(--mono);font-size:9.5px;color:var(--t3)"></span>
+      </div>
+    </div>
+    <div id="rp">
+      <div class="rph">
+        <div class="sring" id="sring"><div class="ringn" id="rsco">87</div><div class="ringl">MATCH %</div></div>
+        <div>
+          <div style="font-size:15px;font-weight:600" id="rco">Company</div>
+          <div style="font-size:12px;color:var(--t2);margin-top:3px" id="rrol">Role</div>
+          <div style="margin-top:8px"><span class="badge interview" id="rqual"><span class="bd"></span>STRONG MATCH</span></div>
+        </div>
+      </div>
+      <div class="div"></div>
+      <div class="rdet">
+        <div class="rdb"><div class="rdl">Resume Mode</div><div class="rdv" id="rmod">balanced</div></div>
+        <div class="rdb"><div class="rdl">ATS Score</div><div class="rdv" id="rats">—</div></div>
+        <div class="rdb"><div class="rdl">Application ID</div><div class="rdv" id="rid">#—</div></div>
+      </div>
+      <div style="margin-top:12px;padding:10px 12px;background:var(--warn-d);border:1px solid rgba(245,158,11,.2);border-radius:var(--rs);font-family:var(--mono);font-size:9px;color:var(--warn)">
+        ⚠ Manual step required — visit the job site and submit your application. Resume &amp; cover letter have been prepared.
+      </div>
+    </div>
+  </div>
