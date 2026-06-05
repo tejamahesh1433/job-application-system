@@ -59,8 +59,11 @@ async def view_document(category: str, filename: str):
     except FileNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc))
 
+    if path.suffix.lower() == ".pdf":
+        return FileResponse(path=str(path), media_type="application/pdf")
+
     if path.suffix.lower() not in {".txt", ".json", ".md", ".csv"}:
-        raise HTTPException(status_code=415, detail="Preview is only available for text files")
+        raise HTTPException(status_code=415, detail="Preview is only available for text files or PDFs")
 
     text = path.read_text(encoding="utf-8", errors="replace")
     return PlainTextResponse(text)

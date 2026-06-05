@@ -24,12 +24,16 @@ from utils.usage_ledger import UsageLimitExceeded, usage_ledger
 logger = logging.getLogger(__name__)
 
 JSEARCH_BASE = "https://jsearch.p.rapidapi.com"
-JSEARCH_HEADERS = {
-    "x-rapidapi-host": "jsearch.p.rapidapi.com",
-    "x-rapidapi-key": settings.jsearch_api_key or "",
-    "Content-Type": "application/json",
-}
 CACHE_DIR = Path(__file__).resolve().parents[2] / ".cache" / "jsearch"
+
+
+def _jsearch_headers() -> Dict[str, str]:
+    """Build headers at call-time so the API key is always fresh from settings."""
+    return {
+        "x-rapidapi-host": "jsearch.p.rapidapi.com",
+        "x-rapidapi-key": settings.jsearch_api_key or "",
+        "Content-Type": "application/json",
+    }
 
 # DevOps / SRE / Cloud job search queries
 DEFAULT_QUERIES = [
@@ -69,10 +73,10 @@ class JobDiscoveryAgent:
         self,
         queries: Optional[List[str]] = None,
         location: str = "United States",
-        num_pages: int = 1,
+        num_pages: int = 3,
         date_posted: str = "today",          # today | 3days | week | month
         remote_only: bool = False,
-        employment_types: str = "FULLTIME",  # FULLTIME,PARTTIME,CONTRACTOR
+        employment_types: str = "FULLTIME,CONTRACTOR,PARTTIME",
     ) -> Dict[str, Any]:
         """
         Main entry point — run a full discovery cycle.
@@ -150,6 +154,7 @@ class JobDiscoveryAgent:
         date_posted: str = "today",
         remote_only: bool = False,
         employment_types: str = "FULLTIME",
+        force: bool = False,
     ) -> List[Dict[str, Any]]:
         """
         Search JSearch API and return list of raw job dicts.
@@ -161,6 +166,9 @@ class JobDiscoveryAgent:
             job_salary_min, job_salary_max, job_salary_currency,
             job_required_skills, job_highlights, job_publisher
         """
+        # JSearch aggregates: Indeed, LinkedIn, Glassdoor, ZipRecruiter,
+        # Google Jobs, Monster, CareerBuilder — all in one call.
+        # No extra params needed; it searches all platforms by default.
         params = {
             "query": f"{query} in {location}",
             "num_pages": str(num_pages),
@@ -170,10 +178,12 @@ class JobDiscoveryAgent:
         if remote_only:
             params["remote_jobs_only"] = "true"
 
-        data = await self._jsearch_get("search", params)
+        data = await self._jsearch_get("search", params, force=force)
 
         jobs = data.get("data", [])
-        logger.debug(f"JSearch returned {len(jobs)} jobs for query: {query}")
+        # Log which platforms this call returned results from
+        publishers = list({j.get("job_publisher","?") for j in jobs if j.get("job_publisher")})
+        logger.info(f"JSearch [{query}] → {len(jobs)} jobs from: {', '.join(publishers) or 'unknown'}")
         return jobs
 
     async def get_job_details(self, job_id: str) -> Optional[Dict[str, Any]]:
@@ -195,8 +205,9 @@ class JobDiscoveryAgent:
         return await self.search_jobs(
             query=f"{company_name} DevOps OR SRE OR Platform Engineer",
             location=location,
-            num_pages=2,
+            num_pages=3,
             date_posted="month",
+            employment_types="FULLTIME,CONTRACTOR,PARTTIME",
         )
 
     async def save_jobs(
@@ -279,11 +290,14 @@ class JobDiscoveryAgent:
     # Internal helpers
     # ─────────────────────────────────────────────────────────────────────────
 
-    async def _jsearch_get(self, endpoint: str, params: Dict[str, Any]) -> Dict[str, Any]:
-        """Call JSearch with local cache and daily/monthly request caps."""
-        cached = self._read_cache(endpoint, params)
-        if cached is not None:
-            return cached
+    async def _jsearch_get(self, endpoint: str, params: Dict[str, Any], force: bool = False) -> Dict[str, Any]:
+        """Call JSearch with local cache and daily/monthly request caps.
+        Pass force=True to bypass the file cache (e.g. on Refresh Search).
+        """
+        if not force:
+            cached = self._read_cache(endpoint, params)
+            if cached is not None:
+                return cached
 
         usage_ledger.ensure_request_capacity(
             service="jsearch",
@@ -298,7 +312,7 @@ class JobDiscoveryAgent:
                 response = await client.get(
                     f"{JSEARCH_BASE}/{endpoint}",
                     params=params,
-                    headers=JSEARCH_HEADERS,
+                    headers=_jsearch_headers(),
                 )
                 response.raise_for_status()
                 data = response.json()
@@ -485,11 +499,11 @@ class JobDiscoveryAgent:
     def _to_summary(raw: Dict[str, Any]) -> Dict[str, Any]:
         """Compact summary dict for API responses."""
         return {
-            "title": raw.get("job_title"),
-            "company": raw.get("employer_name"),
-            "location": raw.get("job_city"),
-            "remote": raw.get("job_is_remote"),
-            "publisher": raw.get("job_publisher"),
+            "title":      raw.get("job_title"),
+            "company":    raw.get("employer_name"),
+            "location":   raw.get("job_city"),
+            "remote":     raw.get("job_is_remote"),
+            "publisher":  raw.get("job_publisher"),
             "apply_link": raw.get("job_apply_link"),
-            "posted": raw.get("job_posted_at_datetime_utc"),
+            "posted":     raw.get("job_posted_at_datetime_utc"),
         }

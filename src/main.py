@@ -51,6 +51,9 @@ app.mount("/dashboard", StaticFiles(directory=str(static_dir), html=True), name=
 
 from routers import jobs, applications, dashboard, match_resume, writing, workflow, gmail, answers, llm, documents
 from routers.user import router as user_router
+from routers.vault import router as vault_router
+from routers.credentials import router as credentials_router
+from routers.form_records import router as form_records_router
 
 app.include_router(jobs.router)
 app.include_router(applications.router)
@@ -63,6 +66,9 @@ app.include_router(gmail.router)
 app.include_router(answers.router)
 app.include_router(llm.router)
 app.include_router(documents.router)
+app.include_router(vault_router)
+app.include_router(credentials_router)
+app.include_router(form_records_router)
 
 
 # ============================================
@@ -104,6 +110,34 @@ def _migrate_schema():
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS resume_parsed JSONB",
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS original_resume_path VARCHAR(512)",
         "ALTER TABLE jobs ALTER COLUMN salary_currency TYPE VARCHAR(50)",
+        # New tables — created via init_db(), these add columns if tables existed before
+        """CREATE TABLE IF NOT EXISTS platform_credentials (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER REFERENCES users(id),
+            platform VARCHAR(100) NOT NULL,
+            username VARCHAR(255) NOT NULL,
+            password_enc TEXT NOT NULL,
+            extra JSONB DEFAULT '{}',
+            notes TEXT,
+            is_active BOOLEAN DEFAULT TRUE,
+            created_at TIMESTAMP DEFAULT NOW(),
+            updated_at TIMESTAMP DEFAULT NOW()
+        )""",
+        """CREATE TABLE IF NOT EXISTS application_form_records (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER REFERENCES users(id),
+            application_id INTEGER REFERENCES applications(id),
+            company_name VARCHAR(255) NOT NULL,
+            job_title VARCHAR(255),
+            platform VARCHAR(100),
+            form_url TEXT,
+            status VARCHAR(50) DEFAULT 'filled',
+            fields JSONB DEFAULT '[]',
+            total_fields INTEGER DEFAULT 0,
+            filled_fields INTEGER DEFAULT 0,
+            error_message TEXT,
+            filled_at TIMESTAMP DEFAULT NOW()
+        )""",
     ]
     try:
         for sql in migrations:
@@ -158,6 +192,5 @@ if __name__ == "__main__":
         "main:app",
         host=settings.api_host,
         port=settings.api_port,
-        reload=settings.debug,
-        log_level=settings.log_level.lower(),
+        reload=True,
     )

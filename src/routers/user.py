@@ -132,7 +132,7 @@ async def upload_resume_file(
         # 4. Extract and update profile from the newly uploaded resume
         try:
             profile_agent = ProfileAgent(db)
-            await profile_agent.extract_profile(user_id=resolved_uid, resume_path=str(dest))
+            await profile_agent.extract_profile_from_resume(user_id=resolved_uid, resume_path=str(dest))
         except Exception as profile_e:
             logger.error(f"Error extracting profile from uploaded resume: {profile_e}")
 

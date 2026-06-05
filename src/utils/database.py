@@ -543,6 +543,62 @@ class AuditLog(Base):
         return f"<AuditLog(id={self.id}, action={self.action}, entity={self.entity_type})>"
 
 
+class PlatformCredential(Base):
+    """Login credentials for job platforms (LinkedIn, Indeed, Glassdoor, etc.)
+    Password is stored Fernet-encrypted — never plaintext.
+    """
+    __tablename__ = "platform_credentials"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+
+    platform = Column(String(100), nullable=False)        # "LinkedIn", "Indeed", etc.
+    username = Column(String(255), nullable=False)         # email or username used to log in
+    password_enc = Column(Text, nullable=False)            # Fernet-encrypted password
+    extra = Column(JSONB, default={})                      # phone, SSN-last4, etc. encrypted
+    notes = Column(Text, nullable=True)
+    is_active = Column(Boolean, default=True)
+
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    user = relationship("User")
+
+    def __repr__(self):
+        return f"<PlatformCredential(platform={self.platform}, user={self.username})>"
+
+
+class ApplicationFormRecord(Base):
+    """Records every form field the browser agent filled during an application.
+    One record per application attempt — stores the full question→answer map.
+    """
+    __tablename__ = "application_form_records"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    application_id = Column(Integer, ForeignKey("applications.id"), nullable=True)
+
+    company_name = Column(String(255), nullable=False, index=True)
+    job_title = Column(String(255), nullable=True)
+    platform = Column(String(100), nullable=True)    # "LinkedIn", "Indeed", etc.
+    form_url = Column(Text, nullable=True)
+    status = Column(String(50), default="filled")    # filled | submitted | error
+
+    # Full field-by-field record:
+    # [{"label": "First Name", "type": "text", "value": "Teja", "section": "Personal"}]
+    fields = Column(JSONB, default=[])
+    total_fields = Column(Integer, default=0)
+    filled_fields = Column(Integer, default=0)
+
+    error_message = Column(Text, nullable=True)
+    filled_at = Column(DateTime, default=datetime.utcnow, index=True)
+
+    user = relationship("User")
+
+    def __repr__(self):
+        return f"<ApplicationFormRecord(company={self.company_name}, fields={self.total_fields})>"
+
+
 # ============================================
 # Database Functions
 # ============================================

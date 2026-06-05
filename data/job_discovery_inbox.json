@@ -1,5 +1,360 @@
 {
   "jobs": {
+    "2045a7d29768d2c0d4dcc4c1": {
+      "discovery_status": "active",
+      "job": {
+        "ats": "71%",
+        "company": "Philips",
+        "company_size": "Not listed",
+        "description": "Job Title DevOps Engineer Job Description Software DevOps Engineer \u2013 Gainesville, FL Join our Development Management Systems (DMS) team as a Software DevOps Engineer, where you will play a critical role in supporting the infrastructure, automation, and development environments that enable reliable software delivery and innovation across the organization. Your role: \u2022 Configure, support, and maintain physical and virtual infrastructure, including servers, storage, networking, and system connectivity for development and testing environments. \u2022 Provision and manage build, test, and deployment environments while developing automation that improves efficiency, consistency, and software delivery quality. \u2022 Design, implement, and maintain Continuous Integration/Continuous Delivery (CI/CD) pipelines, source control workflows, and automated build and deployment processes. \u2022 Monitor system health, collect and analyze infrastructure and pipeline metrics, and implement telemetry solutions to improve performance, reliability, and visibility. \u2022 Partner closely with software engineers, quality teams, information technology stakeholders, and DevOps colleagues to troubleshoot issues, support releases, and drive continuous improvement initiatives. \u2022 Serve as a key onsite DevOps resource in Gainesville, providing hands-on support for infrastructure, hardware integration, and environment-related priorities that are critical to the success of the DMS organization. You're the right fit if: \u2022 You\u2019ve acquired experience in system administration, infrastructure support, software engineering, networ",
+        "founded": "Not listed",
+        "id": "2045a7d29768d2c0d4dcc4c1",
+        "industry": "Technology",
+        "interview_prob": "79%",
+        "is_live": true,
+        "job_type": "Full Time",
+        "location": "Andover, Massachusetts, US",
+        "match": "98%",
+        "posted": "Yesterday",
+        "posted_exact": "Jun 4, 2026 \u00b7 00:00 UTC",
+        "salary": "Not listed",
+        "skills_matched": [
+          "CI/CD"
+        ],
+        "skills_missing": [
+          "Python",
+          "AWS",
+          "Docker"
+        ],
+        "source": "JSearch/Philips Careers",
+        "tech_stack": [
+          "CI/CD"
+        ],
+        "title": "DevOps Engineer",
+        "url": "https://www.careers.philips.com/na/en/job/582349/DevOps-Engineer",
+        "warnings": [
+          "Salary not listed"
+        ],
+        "work_type": "Onsite"
+      },
+      "last_seen_at": "2026-06-05T02:27:51.785390+00:00",
+      "saved_at": "2026-06-05T02:27:51.785390+00:00",
+      "user_id": 1
+    },
+    "3dd487b01806b50d34e86dee": {
+      "discovery_status": "removed",
+      "job": {
+        "ats": "64%",
+        "company": "A.Team",
+        "company_size": "Not listed",
+        "description": "Senior Independent AI Engineer / Architect Remote | Americas, Europe, or Israel Most AI engineers can find work. Finding work worth doing is harder. A.Team is an invite-only network of senior AI engineers, ML engineers, and AI architects building production AI systems for startups, enterprises, and global companies. Since 2020, builders in the network have earned more than $200M working with companies including Lyft, Google X, HCA, Unilever, Sightful, D-ID, and others. The Work You'll join small teams solving real problems. Not demos. Not proof-of-concepts that never ship. Not another thin wrapper around an API. Recent work has included: AI-native products built from 0\u21921 Agent architectures and orchestration systems Enterprise AI deployments Retrieval, evaluation, and reliability infrastructure LLM-powered workflows and products Machine learning platforms operating at scale You'll work directly with founders, CTOs, and product leaders, helping shape both technical direction and execution. Why Builders Join The best opportunities rarely make it to the open market. A.Team exists to solve that. No bidding. No prospecting. No race to the bottom. Just ambitious companies, difficult prob",
+        "founded": "Not listed",
+        "id": "3dd487b01806b50d34e86dee",
+        "industry": "Software Development",
+        "interview_prob": "65%",
+        "is_live": true,
+        "job_type": "Contract",
+        "location": "Americas, Europe, Israel",
+        "match": "76%",
+        "posted": "2w ago",
+        "posted_exact": "May 16, 2026 \u00b7 10:16 UTC",
+        "salary": "$120 - $170 /hour",
+        "skills_matched": [],
+        "skills_missing": [
+          "Python",
+          "AWS",
+          "Docker"
+        ],
+        "source": "Remotive",
+        "tech_stack": [
+          "go",
+          "UI/UX",
+          "wordpress",
+          "chat",
+          "apple",
+          "testing"
+        ],
+        "title": "Senior Independent AI Engineer / Architect",
+        "url": "https://remotive.com/remote-jobs/software-development/senior-independent-ai-engineer-architect-1919266",
+        "warnings": [],
+        "work_type": "Remote"
+      },
+      "last_seen_at": "2026-06-05T02:13:22.637511+00:00",
+      "saved_at": "2026-06-05T02:13:22.637511+00:00",
+      "updated_at": "2026-06-05T02:17:53.853058+00:00",
+      "user_id": 1
+    },
+    "4bc14fa8b0ee297bd2141b81": {
+      "discovery_status": "active",
+      "job": {
+        "ats": "96%",
+        "company": "Webilent Technology, Inc.",
+        "company_size": "Not listed",
+        "description": "Azure/AWS Cloud Administrator (AI Deployment & MLOps) \ud83d\udccd Remote / Hybrid | Contract / Contract-to-Hire About the Role We are seeking an experienced Azure/AWS Cloud Administrator with strong expertise in cloud infrastructure, CI/CD automation, and AI/ML deployment. The ideal candidate will have hands-on experience managing enterprise cloud environments, implementing Infrastructure as Code (IaC), and operationalizing machine learning models in production. This role will work closely with cloud engineers, DevOps teams, and data scientists to deliver scalable, secure, and cost-effective AI solutions. Key Responsibilities \u2022 Manage, administer, and optimize Azure and/or AWS cloud environments. \u2022 Design, implement, and maintain cloud infrastructure using Infrastructure as Code (Terraform, CloudFormation, ARM/Bicep). \u2022 Build and support CI/CD pipelines using Azure DevOps, GitHub Actions, Jenkins, or AWS CodePipeline. \u2022 Deploy, monitor, and maintain AI/ML models in production using Azure Machine Learning, AWS SageMaker, or similar platforms. \u2022 Manage containerized workloads utilizing Docker and Kubernetes (AKS/EKS). \u2022 Implement cloud security best practices including IAM, networking, compliance, and governance. \u2022 Monitor application, infrastructure, and AI model performance to ensure scalability and reliability. \u2022 Troubleshoot cloud infrastructure, deployment pipelines, and production AI workloads. \u2022 Optimize cloud resource utilization and cost management for AI/ML environments. \u2022 Collaborate with Data Science, DevOps, and Engineering teams to streamline model deployment and operatio",
+        "founded": "Not listed",
+        "id": "4bc14fa8b0ee297bd2141b81",
+        "industry": "Technology",
+        "interview_prob": "92%",
+        "is_live": true,
+        "job_type": "Contractor",
+        "location": "Bloomfield, Connecticut, US",
+        "match": "98%",
+        "posted": "6h 27m ago",
+        "posted_exact": "Jun 4, 2026 \u00b7 20:00 UTC",
+        "salary": "Not listed",
+        "skills_matched": [
+          "AWS",
+          "Docker",
+          "Kubernetes",
+          "Git",
+          "Terraform",
+          "CI/CD"
+        ],
+        "skills_missing": [
+          "Python",
+          "Linux"
+        ],
+        "source": "JSearch/LinkedIn",
+        "tech_stack": [
+          "AWS",
+          "Docker",
+          "Kubernetes",
+          "Git",
+          "Terraform",
+          "CI/CD"
+        ],
+        "title": "Azure /  AWS Admin / Devops Engineer",
+        "url": "https://www.linkedin.com/jobs/view/azure-aws-admin-devops-engineer-at-webilent-technology-inc-4423579065",
+        "warnings": [
+          "Salary not listed"
+        ],
+        "work_type": "Onsite"
+      },
+      "last_seen_at": "2026-06-05T02:27:51.785390+00:00",
+      "saved_at": "2026-06-05T02:27:51.785390+00:00",
+      "user_id": 1
+    },
+    "6f0164f9e49eee147a4fb849": {
+      "discovery_status": "removed",
+      "job": {
+        "ats": "82%",
+        "company": "Mitre Media",
+        "company_size": "Not listed",
+        "description": "About Mitre Media Mitre Media is redefining FinTech with AI-driven tools that empower millions of investors. Our portfolio, including Dividend.com and MutualFunds.com, leverages LLMs to deliver novel data insights and visually rich user experiences. For over a decade, we\u2019ve served individual investors, financial advisors, and top asset managers like BlackRock and Vanguard through our premium data, tools, and advertising solutions. Join our lean, entrepreneurial team to shape the future of AI-powered investing from your location \u00b13 hours from Eastern Time. Our users are deeply engaged, spending over 5 minutes per visit with a bounce rate below 10%, researching investments across hundreds of different categories. With 40 million brokerage accounts in the U.S., we take pride in building tools that make a real impact, fostering a culture of trust, innovation, and dynamism. If you\u2019re passionate about financial technology and AI, we\u2019d love to connect! About the Role As a Full-Stack Rails Tech Lead, you\u2019ll architect and implement LLM-powered web applications within our microservices-based Rails 8 platform. Reporting directly to our CTO, you\u2019ll collaborate with a small, high-impact team to",
+        "founded": "Not listed",
+        "id": "6f0164f9e49eee147a4fb849",
+        "industry": "Software Development",
+        "interview_prob": "81%",
+        "is_live": true,
+        "job_type": "Full Time",
+        "location": "USA, Canada, USA timezones",
+        "match": "91%",
+        "posted": "3w ago",
+        "posted_exact": "May 14, 2026 \u00b7 20:46 UTC",
+        "salary": "$170k - $200k",
+        "skills_matched": [
+          "Docker",
+          "Kubernetes",
+          "Git"
+        ],
+        "skills_missing": [
+          "Python",
+          "AWS",
+          "Linux"
+        ],
+        "source": "Remotive",
+        "tech_stack": [
+          "api",
+          "CSS",
+          "docker",
+          "elasticsearch",
+          "fullstack",
+          "html"
+        ],
+        "title": "Tech Lead Full-Stack Rails Engineer",
+        "url": "https://remotive.com/remote-jobs/software-development/tech-lead-full-stack-rails-engineer-2069746",
+        "warnings": [],
+        "work_type": "Remote"
+      },
+      "last_seen_at": "2026-06-05T02:13:22.637511+00:00",
+      "saved_at": "2026-06-05T02:13:22.637511+00:00",
+      "updated_at": "2026-06-05T02:17:54.480313+00:00",
+      "user_id": 1
+    },
+    "858a0078530cb83a1212355b": {
+      "discovery_status": "active",
+      "job": {
+        "ats": "95%",
+        "company": "SAIC",
+        "company_size": "Not listed",
+        "description": "Job ID: 2612927-OTHLOC-100000654856414 Location: Arlington, VA, US Date Posted: 2026-05-28 Category: Software Subcategory: DevSecOps Schedule: Full-Time Shift: Day Job Travel: No Minimum Clearance Required: TS.SCI Clearance Level Must Be Able to Obtain: None Potential for Remote Work: ORA_ON_SITE Description SAIC is seeking Azure DevOps Engineer to join our team. The Azure DevOps Engineer can work at one of the following SAIC locations: Arlington, VA or Charleston, SC. Role Overview: \u2022 Role: Platform Engineer building and running our internal developer platform (Azure, CI/CD, Kubernetes, pipelines and automation) for both connected and air-gapped environments. \u2022 Core Tooling: GitLab for source control and pipelines; Terraform as the primary automation language; Python for helpers/tests; Helm for Kubernetes deployments. \u2022 Platform Stack: Microsoft Azure Stack Hub and Hyper-V sidecar. \u2022 Delivery Expectations: trunk-based GitLab workflows, deterministic pipelines with built-in testing and security scans, evidence (JUnit/SBOM/scan) attached to every change, no manual \u201cclick-ops.\u201d \u2022 Supply Chain and Air-Gap Hygiene: checksum/signature/SBOM-driven movement of artifacts, mirroring via reposync and Pulp, offline scanning and promotion for high-side environments. \u2022 Security and Identity: secret hygiene by default, secrets management familiarity, and comfort with vulnerability/misconfig scanning in CI (SAST, IaC, secret detection, Semgrep/KICS, Trivy/pip-audit). Qualifications Education Requirements: \u2022 Bachelors degree and five (5) years experience; Four (4) years' experience can be ",
+        "founded": "Not listed",
+        "id": "858a0078530cb83a1212355b",
+        "industry": "Technology",
+        "interview_prob": "91%",
+        "is_live": true,
+        "job_type": "Full Time",
+        "location": "Arlington, Virginia, US",
+        "match": "98%",
+        "posted": "1w ago",
+        "posted_exact": "May 29, 2026 \u00b7 00:00 UTC",
+        "salary": "Not listed",
+        "skills_matched": [
+          "Python",
+          "Kubernetes",
+          "Git",
+          "Terraform",
+          "CI/CD"
+        ],
+        "skills_missing": [
+          "AWS",
+          "Docker",
+          "Linux"
+        ],
+        "source": "JSearch/Indeed",
+        "tech_stack": [
+          "Python",
+          "Kubernetes",
+          "Git",
+          "Terraform",
+          "CI/CD"
+        ],
+        "title": "Azure DevOps Engineer",
+        "url": "https://www.indeed.com/viewjob?jk=f6450e6b4fd2dff6",
+        "warnings": [
+          "Salary not listed"
+        ],
+        "work_type": "Onsite"
+      },
+      "last_seen_at": "2026-06-05T02:27:51.785390+00:00",
+      "saved_at": "2026-06-05T02:27:51.785390+00:00",
+      "user_id": 1
+    },
+    "8b71813d5e1d6f237930305f": {
+      "discovery_status": "active",
+      "job": {
+        "ats": "83%",
+        "company": "Twenty",
+        "company_size": "Not listed",
+        "description": "About The Company America is under sustained cyber attack. Our adversaries infiltrate our networks, steal our IP, and degrade the digital infrastructure that modern life runs on. They\u2019ve learned\u2014correctly\u2014that those attacks rarely produce consequences. Twenty was founded to change that, by making our adversaries think twice before they attack us. Our vision is American and allied primacy in cyberspace\u2014a future where they cannot contest us, deterrence is assured, and the free world remains secure. Founded in 2024, Twenty Technologies (www.twenty.io) industrializes offensive cyber operations for the U.S. and its allies. Headquartered in Arlington, Virginia, Twenty has raised $38M from Caffeinated Capital, General Catalyst, and In-Q-Tel. Role Summary We are seeking a DevOps Engineer / Software Engineer \u2013 Infrastructure for an in-office position in our Arlington, VA office focused on infrastructure and reliability to help design, build, and operate our application platform. This position is at the crossroads of software engineering, operations, and security. You will own core AWS infrastructure, drive observability and reliability improvements, and collaborate closely with product and backend teams. Common backgrounds for this role include DevOps Engineer, SRE, Platform Engineer, or Backend Engineer (Infrastructure). What You\u2019ll Do \u2022 Design, build, and operate AWS-based infrastructure. \u2022 Implement and maintain Infrastructure-as-Code for single-tenant and multi-tenant environments using Terraform. \u2022 Build and maintain deployment and environment automation (Ansible or similar). \u2022",
+        "founded": "Not listed",
+        "id": "8b71813d5e1d6f237930305f",
+        "industry": "Technology",
+        "interview_prob": "85%",
+        "is_live": true,
+        "job_type": "Full Time",
+        "location": "Arlington, Virginia, US",
+        "match": "98%",
+        "posted": "6d ago",
+        "posted_exact": "May 30, 2026 \u00b7 00:00 UTC",
+        "salary": "Not listed",
+        "skills_matched": [
+          "AWS",
+          "Git",
+          "Terraform"
+        ],
+        "skills_missing": [
+          "Python",
+          "Docker",
+          "Kubernetes"
+        ],
+        "source": "JSearch/LinkedIn",
+        "tech_stack": [
+          "AWS",
+          "Git",
+          "Terraform"
+        ],
+        "title": "DevOps Engineer",
+        "url": "https://www.linkedin.com/jobs/view/devops-engineer-at-twenty-4413673011",
+        "warnings": [
+          "Salary not listed"
+        ],
+        "work_type": "Onsite"
+      },
+      "last_seen_at": "2026-06-05T02:27:51.785390+00:00",
+      "saved_at": "2026-06-05T02:27:51.785390+00:00",
+      "user_id": 1
+    },
+    "93ebc730be9278fddb5db2e8": {
+      "discovery_status": "active",
+      "job": {
+        "ats": "65%",
+        "company": "Sentara",
+        "company_size": "Not listed",
+        "description": "Sentara is hiring a DevOps Engineer! This position is fully remote. Overview Software product development focuses on developing multiple types/categories of software including end-user applications, enterprise data architecture, and operating systems/utility software and tools, which provides a platform for running end-user applications for external customers. The work includes: \u2022Understanding the domain of the software problem and/or functionality, the interfaces between hardware and software, and the overall software characteristics \u2022Using programming, scripting, and/or database languages to write the software code \u2022Supporting software test engineering, DevOps, deployment, maintenance, and evolution activities by correcting programming errors, responding to scope changes, and coding software enhancements \u2022Applying knowledge of software development best practices, including technical design specifications, coding standards, code reviews, source control management, build processes, testing, and operations. Possesses key certification(s) or another credential(s) determined central to the systems or applications supported. An Experienced Professional applies practical knowledge of job areas typically obtained through advanced education and work experience. Responsibilities typically include: \u2022 Works independently with general supervision. \u2022 Problems faced are difficult but typically not complex. \u2022 May influence others within the job area through explanation of facts, policies, and practices. Education \u2022 5+ years of relevant experience with a degree (Required) or \u2022 7+ years of",
+        "founded": "Not listed",
+        "id": "93ebc730be9278fddb5db2e8",
+        "industry": "Technology",
+        "interview_prob": "75%",
+        "is_live": true,
+        "job_type": "Full Time",
+        "location": "Remote",
+        "match": "96%",
+        "posted": "2d ago",
+        "posted_exact": "Jun 3, 2026 \u00b7 00:00 UTC",
+        "salary": "Not listed",
+        "skills_matched": [],
+        "skills_missing": [
+          "Python",
+          "AWS",
+          "Docker"
+        ],
+        "source": "JSearch/Sentara Careers",
+        "tech_stack": [],
+        "title": "DevOps Engineer - Remote",
+        "url": "https://www.sentaracareers.com/job/23451712/devops-engineer-remote-remote/",
+        "warnings": [
+          "Salary not listed"
+        ],
+        "work_type": "Remote"
+      },
+      "last_seen_at": "2026-06-05T02:27:51.785390+00:00",
+      "saved_at": "2026-06-05T02:27:51.785390+00:00",
+      "user_id": 1
+    },
+    "a929e8b9e78791d347e2dfd7": {
+      "discovery_status": "active",
+      "job": {
+        "ats": "77%",
+        "company": "Accenture Federal Services",
+        "company_size": "Not listed",
+        "description": "At Accenture Federal Services, nothing matters more than helping the US federal government make the nation stronger and safer and life better for people. Our 13,000+ people are united in a shared purpose to pursue the limitless potential of technology and ingenuity for clients across defense, national security, public safety, civilian, and military health organizations. Join Accenture Federal Services, a technology company within global Accenture. Recognized as a Glassdoor Top 100 Best Place to Work, we offer a collaborative and caring community where you feel like you belong and are empowered to grow, learn and thrive through hands-on experience, certifications, industry training and more. Join us to drive positive, lasting change that moves missions and the government forward! The work The DevOps Engineer is responsible for designing, configuring, and maintaining a comprehensive DevSecOps pipeline that supports the SAP enterprise application environment. This role integrates modern DevOps practices, automation, and security tooling to streamline SAP development, enhance code quality, and strengthen release processes. The DevOps Engineer collaborates closely with SAP developers, functional consultants, architects, and security teams to drive continuous improvement, improve operational efficiency, and ensure a secure and scalable development lifecycle. Key responsibilities: \u2022 Design, build, and maintain CI/CD pipelines in GitLab to automate build, test, and deployment processes \u2022 Integrate and manage toolchains including Jira, SAP Solution Manager (Solman) CHaRM, SonarQube,",
+        "founded": "Not listed",
+        "id": "a929e8b9e78791d347e2dfd7",
+        "industry": "Technology",
+        "interview_prob": "82%",
+        "is_live": true,
+        "job_type": "Full Time",
+        "location": "Washington, District of Columbia, US",
+        "match": "98%",
+        "posted": "2d ago",
+        "posted_exact": "Jun 3, 2026 \u00b7 00:00 UTC",
+        "salary": "Not listed",
+        "skills_matched": [
+          "Git",
+          "CI/CD"
+        ],
+        "skills_missing": [
+          "Python",
+          "AWS",
+          "Docker"
+        ],
+        "source": "JSearch/LinkedIn",
+        "tech_stack": [
+          "Git",
+          "CI/CD"
+        ],
+        "title": "SAP DevOps Engineer",
+        "url": "https://www.linkedin.com/jobs/view/sap-devops-engineer-at-accenture-federal-services-4422610197",
+        "warnings": [
+          "Salary not listed"
+        ],
+        "work_type": "Onsite"
+      },
+      "last_seen_at": "2026-06-05T02:27:51.785390+00:00",
+      "saved_at": "2026-06-05T02:27:51.785390+00:00",
+      "user_id": 1
+    },
     "af4e97ed4c44b411af3ff276": {
       "discovery_status": "removed",
       "job": {
@@ -42,6 +397,133 @@
       "last_seen_at": "2026-06-05T00:29:16.198764+00:00",
       "saved_at": "2026-06-05T00:29:16.198764+00:00",
       "updated_at": "2026-06-05T00:29:30.943077+00:00",
+      "user_id": 1
+    },
+    "d472728a5ce82e98d3af65af": {
+      "discovery_status": "active",
+      "job": {
+        "ats": "65%",
+        "company": "Northrop Grumman",
+        "company_size": "Not listed",
+        "description": "RELOCATION ASSISTANCE: Relocation assistance may be available CLEARANCE REQUIRED FOR START: Yes CLEARANCE TYPE: Secret TRAVEL: Yes, 10% of the Time ## Description At Northrop Grumman, our employees have incredible opportunities to work on revolutionary systems that impact people's lives around the world today, and for generations to come. Our pioneering and inventive spirit has enabled us to be at the forefront of many technological advancements in our nation's history - from the first flight across the Atlantic Ocean, to stealth bombers, to landing on the moon. We look for people who have bold new ideas, courage and a pioneering spirit to join forces to invent the future, and have fun along the way. Our culture thrives on intellectual curiosity, cognitive diversity and bringing your whole self to work \u2014 and we have an insatiable drive to do what others think is impossible. Our employees are not only part of history, they're making history. At Northrop Grumman, our employees have incredible opportunities to work on revolutionary systems in air and space that impact people\u2019s lives around the world today, and for generations to come. Our work preserves freedom, democracy, and advances human discovery and our understanding of the universe. We look for people who have bold new ideas, courage and a pioneering spirit to join forces to invent the future and have a lot of fun along the way. Our culture thrives on intellectual curiosity, cognitive diversity and bringing your whole self to work \u2014 and we have an insatiable drive to do what others think is impossible. Our employees are",
+        "founded": "Not listed",
+        "id": "d472728a5ce82e98d3af65af",
+        "industry": "Technology",
+        "interview_prob": "69%",
+        "is_live": true,
+        "job_type": "Full Time",
+        "location": "Huntsville, Alabama, US",
+        "match": "84%",
+        "posted": "4d ago",
+        "posted_exact": "Jun 1, 2026 \u00b7 00:00 UTC",
+        "salary": "Not listed",
+        "skills_matched": [],
+        "skills_missing": [
+          "Python",
+          "AWS",
+          "Docker"
+        ],
+        "source": "JSearch/Northrop Grumman",
+        "tech_stack": [],
+        "title": "Sentinel Staff Engineer DevOps-16406",
+        "url": "https://jobs.northropgrumman.com/careers/job/1340071974498",
+        "warnings": [
+          "Salary not listed"
+        ],
+        "work_type": "Onsite"
+      },
+      "last_seen_at": "2026-06-05T02:27:51.785390+00:00",
+      "saved_at": "2026-06-05T02:27:51.785390+00:00",
+      "user_id": 1
+    },
+    "d93ecf5905477db2c68d44bd": {
+      "discovery_status": "active",
+      "job": {
+        "ats": "95%",
+        "company": "Eliassen Group",
+        "company_size": "Not listed",
+        "description": "Description: Hybrid 3 days per week in the office in Gaithersburg, MD Our client seeks two DevOps Software Engineers at the mid or senior level to support Linux-centric platform engineering and automation. The role involves full lifecycle system administration on Red Hat Enterprise Linux, configuration management with Ansible, scripting with Python and Bash, and containerization using Docker or Podman. Work will include Infrastructure as Code practices, CI/CD automation, and environment provisioning across physical, virtual, and container platforms. Due to federal security clearance requirements, applicant must be a United States Citizen or Permanent Resident with an active Public Trust clearance. Due to client requirements, applicants must be willing and able to work on a w2 basis. For our w2 consultants, we offer a great benefits package that includes Medical, Dental, and Vision benefits, 401k with company matching, and life insurance. Rate: $55.00 to $55.00/hr. w2 Responsibilities: \u2022 Administer and manage Red Hat Enterprise Linux systems from provisioning to operational deployment. \u2022 Develop and maintain Ansible playbooks, roles, custom plugins, callbacks, and inventories. \u2022 Automate platform workflows and tooling with Python and Bash. \u2022 Build and manage containers with Docker or Podman, including image creation and orchestration. \u2022 Implement Infrastructure as Code practices and CI/CD pipelines. \u2022 Manage Git workflows for configuration and code versioning. \u2022 Configure networks and perform environment provisioning across physical and virtual platforms. \u2022 Support physical ",
+        "founded": "Not listed",
+        "id": "d93ecf5905477db2c68d44bd",
+        "industry": "Technology",
+        "interview_prob": "91%",
+        "is_live": true,
+        "job_type": "Contractor",
+        "location": "Gaithersburg, Maryland, US",
+        "match": "98%",
+        "posted": "2d ago",
+        "posted_exact": "Jun 3, 2026 \u00b7 00:00 UTC",
+        "salary": "Not listed",
+        "skills_matched": [
+          "Python",
+          "Docker",
+          "Linux",
+          "Git",
+          "CI/CD"
+        ],
+        "skills_missing": [
+          "AWS",
+          "Kubernetes",
+          "Terraform"
+        ],
+        "source": "JSearch/Eliassen Group Careers",
+        "tech_stack": [
+          "Python",
+          "Docker",
+          "Linux",
+          "Git",
+          "CI/CD"
+        ],
+        "title": "DevOps Software Engineer",
+        "url": "https://careers.eliassen.com/01OvrE/devops-software-engineer-devops-gaithersburg-md-a1wuq000001cxrj2aq",
+        "warnings": [
+          "Salary not listed"
+        ],
+        "work_type": "Onsite"
+      },
+      "last_seen_at": "2026-06-05T02:27:51.785390+00:00",
+      "saved_at": "2026-06-05T02:27:51.785390+00:00",
+      "user_id": 1
+    },
+    "e416f4f25129286c8878d3ce": {
+      "discovery_status": "active",
+      "job": {
+        "ats": "71%",
+        "company": "Palo Alto Networks, Inc.",
+        "company_size": "Not listed",
+        "description": "Our Mission At Palo Alto Networks\u00ae, we\u2019re united by a shared mission\u2014to protect our digital way of life. We thrive at the intersection of innovation and impact, solving real-world problems with cutting-edge technology and bold thinking. Here, everyone has a voice, and every idea counts. If you\u2019re ready to do the most meaningful work of your career alongside people who are just as passionate as you are, you\u2019re in the right place. Who We Are In order to be the cybersecurity partner of choice, we must trailblaze the path and shape the future of our industry. This is something our employees work at each day and is defined by our values: Disruption, Collaboration, Execution, Integrity, and Inclusion. We weave AI into the fabric of everything we do and use it to augment the impact every individual can have. If you are passionate about solving real-world problems and ideating beside the best and the brightest, we invite you to join us! We believe collaboration thrives in person. That\u2019s why most of our teams work from the office full time, with flexibility when it\u2019s needed. This model supports real-time problem-solving, stronger relationships, and the kind of precision that drives great outcomes. Job Summary Your Career The Prisma Browser Platform plays a critical role in today's digital landscape by enabling secure and efficient remote work. By protecting unmanaged devices and securing workflows, it allows users to work from anywhere with absolute confidence, meeting the growing need for flexibility and security in the modern workplace. As a DevOps Engineer within the Prisma Brows",
+        "founded": "Not listed",
+        "id": "e416f4f25129286c8878d3ce",
+        "industry": "Technology",
+        "interview_prob": "79%",
+        "is_live": true,
+        "job_type": "Full Time",
+        "location": "Santa Clara, California, US",
+        "match": "98%",
+        "posted": "2d ago",
+        "posted_exact": "Jun 3, 2026 \u00b7 00:00 UTC",
+        "salary": "Not listed",
+        "skills_matched": [
+          "Git"
+        ],
+        "skills_missing": [
+          "Python",
+          "AWS",
+          "Docker"
+        ],
+        "source": "JSearch/Palo Alto Networks",
+        "tech_stack": [
+          "Git"
+        ],
+        "title": "Principal DevOps Engineer (Prisma Browser Platform)",
+        "url": "https://jobs.paloaltonetworks.com/en/job/santa-clara/principal-devops-engineer-prisma-browser-platform/47263/95959039024",
+        "warnings": [
+          "Salary not listed"
+        ],
+        "work_type": "Onsite"
+      },
+      "last_seen_at": "2026-06-05T02:27:51.785390+00:00",
+      "saved_at": "2026-06-05T02:27:51.785390+00:00",
       "user_id": 1
     },
     "e532dcdd55359bdd0da8360d": {
@@ -87,6 +569,43 @@
       "saved_at": "2026-06-05T00:29:16.198764+00:00",
       "updated_at": "2026-06-05T00:29:30.955921+00:00",
       "user_id": 1
+    },
+    "fba7406ea146d75e8899fe13": {
+      "discovery_status": "active",
+      "job": {
+        "ats": "65%",
+        "company": "Deloitte",
+        "company_size": "Not listed",
+        "description": "As a DevOps Engineer III you will actively engage in your engineering craft, taking a hands-on approach to multiple high-visibility projects. Your expertise will be pivotal in delivering solutions that delight customers and users, while also driving tangible value for Deloitte's business investments. You will leverage your SRE engineering craftsmanship and advanced proficiency across multiple programming languages, SRE tools, and modern frameworks, consistently demonstrating your exemplary track record in maintaining production systems with high-quality, modern observability practices, and SLAs. The ideal candidate will be having monitoring and observability implementation experience in large scale critical projects, collaborating with cross-functional teams to design, develop, and deploy such solutions. Recruiting will end on August 28, 2026 Work you'll do \u2022 Outcome-Driven Accountability: Implementation of cost-effective platform operations, improving stability/resilience and automating optimizations to reduce maintenance effort and meet business KPIs. \u2022 Technical Leadership and Advocacy: Follow SRE practices aligned to business goals and standards; leads requirement analysis, automation, integration, monitoring/dashboarding, and ongoing operational support. \u2022 Engineering Craftsmanship: Configures, integrates, and maintains systems, helps solve complex problems through operational automations and predictive analytics. Works with the team to identify bottlenecks and optimizations, adhering to defined standards/SLAs. \u2022 Customer-Centric Engineering: Develops and iterates oper",
+        "founded": "Not listed",
+        "id": "fba7406ea146d75e8899fe13",
+        "industry": "Technology",
+        "interview_prob": "75%",
+        "is_live": true,
+        "job_type": "Full Time",
+        "location": "Arlington, Virginia, US",
+        "match": "96%",
+        "posted": "3d ago",
+        "posted_exact": "Jun 2, 2026 \u00b7 00:00 UTC",
+        "salary": "Not listed",
+        "skills_matched": [],
+        "skills_missing": [
+          "Python",
+          "AWS",
+          "Docker"
+        ],
+        "source": "JSearch/LinkedIn",
+        "tech_stack": [],
+        "title": "DevOps Engineer III- PxE Talent",
+        "url": "https://www.linkedin.com/jobs/view/devops-engineer-iii-pxe-talent-at-deloitte-4421867652",
+        "warnings": [
+          "Salary not listed"
+        ],
+        "work_type": "Onsite"
+      },
+      "last_seen_at": "2026-06-05T02:27:51.785390+00:00",
+      "saved_at": "2026-06-05T02:27:51.785390+00:00",
+      "user_id": 1
     }
   },
   "searches": {
@@ -106,6 +625,33 @@
       "searched_at": "2026-06-05T00:28:53.499053+00:00",
       "user_id": 1
     },
+    "294d2cd58d3c6e4f168e96dd": {
+      "job_ids": [
+        "2045a7d29768d2c0d4dcc4c1",
+        "d93ecf5905477db2c68d44bd",
+        "a929e8b9e78791d347e2dfd7",
+        "4bc14fa8b0ee297bd2141b81",
+        "e416f4f25129286c8878d3ce",
+        "858a0078530cb83a1212355b",
+        "8b71813d5e1d6f237930305f",
+        "fba7406ea146d75e8899fe13",
+        "93ebc730be9278fddb5db2e8",
+        "d472728a5ce82e98d3af65af"
+      ],
+      "params": {
+        "country": "United States",
+        "experience": "",
+        "job_type": "all",
+        "keyword": "DevOps Engineer",
+        "location": "Anywhere in USA",
+        "role_type": "",
+        "salary_min": "0",
+        "source": "",
+        "work_type": "all"
+      },
+      "searched_at": "2026-06-05T02:27:51.785390+00:00",
+      "user_id": 1
+    },
     "63659479cc3c136962db5f8d": {
       "job_ids": [],
       "params": {
@@ -120,6 +666,54 @@
         "work_type": "remote"
       },
       "searched_at": "2026-06-05T00:29:05.933885+00:00",
+      "user_id": 1
+    },
+    "7ed4d5f505f566542f204a6d": {
+      "job_ids": [],
+      "params": {
+        "country": "United States",
+        "experience": "",
+        "job_type": "contract",
+        "keyword": "DevOps Engineer",
+        "location": "Anywhere in USA",
+        "role_type": "",
+        "salary_min": "0",
+        "source": "remotive",
+        "work_type": "all"
+      },
+      "searched_at": "2026-06-05T02:27:08.958795+00:00",
+      "user_id": 1
+    },
+    "abe6d644e358d471d091dc99": {
+      "job_ids": [],
+      "params": {
+        "country": "United States",
+        "experience": "",
+        "job_type": "contract",
+        "keyword": "DevOps Engineer",
+        "location": "Anywhere in USA",
+        "role_type": "",
+        "salary_min": "0",
+        "source": "arbeitnow",
+        "work_type": "all"
+      },
+      "searched_at": "2026-06-05T02:19:47.799527+00:00",
+      "user_id": 1
+    },
+    "d0fe263a2f18818213e43cc6": {
+      "job_ids": [],
+      "params": {
+        "country": "United States",
+        "experience": "",
+        "job_type": "contract",
+        "keyword": "DevOps Engineer",
+        "location": "Anywhere in USA",
+        "role_type": "",
+        "salary_min": "0",
+        "source": "",
+        "work_type": "all"
+      },
+      "searched_at": "2026-06-05T02:08:07.106408+00:00",
       "user_id": 1
     },
     "dd34153546fe9ff3722d6a54": {

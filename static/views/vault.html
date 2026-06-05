@@ -1,0 +1,244 @@
+<div class="pgh">
+  <div>
+    <div class="pgtit">Job Vault</div>
+    <div class="pgsub">Every discovered job — active, applied, interviewing, offers, and removed. Nothing is lost.</div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <a href="/api/vault/export/csv?user_id=1" class="btn bsec bsm" style="text-decoration:none">↓ Export CSV</a>
+    <a href="/api/vault/export/excel?user_id=1" class="btn bsec bsm" style="text-decoration:none">↓ Export Excel</a>
+  </div>
+</div>
+
+<!-- Filter tabs + search bar -->
+<div class="panel" style="margin-bottom:14px">
+  <div style="padding:10px 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--bord)">
+    <div id="vault-tabs" style="display:flex;gap:3px;flex-wrap:wrap;flex:1;min-width:0"></div>
+    <input id="vault-search" type="text" class="finp" placeholder="Search title, company, location…"
+      style="width:210px;flex-shrink:0" oninput="filterVaultLocal()">
+  </div>
+  <div id="vault-grid" style="display:flex;flex-direction:column">
+    <div class="empty"><div class="et">Loading vault…</div></div>
+  </div>
+</div>
+
+<style>
+.vtab{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 11px;border-radius:3px;
+  font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  cursor:pointer;border:1px solid transparent;
+  background:transparent;color:var(--t3);
+  transition:all .15s;
+}
+.vtab:hover{background:var(--card-h);color:var(--t2);border-color:var(--bord);}
+.vtab.active{background:var(--acc-d);color:var(--acc);border-color:rgba(232,145,58,.25);}
+.vtab .vcnt{font-weight:400;opacity:.65;}
+
+.vcard{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:14px 18px;border-bottom:1px solid rgba(28,35,55,.5);
+  transition:background .12s;
+  animation:fup .25s ease backwards;
+}
+.vcard:last-child{border-bottom:none;}
+.vcard:hover{background:var(--card-h);}
+
+.vcard-logo{
+  width:32px;height:32px;border-radius:6px;
+  background:var(--surf);border:1px solid var(--bord);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  color:var(--t2);flex-shrink:0;text-transform:uppercase;
+}
+.vcard-body{flex:1;min-width:0;}
+.vcard-title{font-size:13px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px;}
+.vcard-meta{font-family:var(--mono);font-size:9px;color:var(--t3);}
+
+.vstatus{
+  display:inline-flex;align-items:center;gap:4px;
+  font-family:var(--mono);font-size:8px;font-weight:600;
+  letter-spacing:.05em;text-transform:uppercase;
+  padding:2px 7px;border-radius:3px;flex-shrink:0;
+}
+.vstatus::before{content:'';width:4px;height:4px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.vs-active   {background:rgba(34,197,94,.10); color:var(--ok);}
+.vs-saved    {background:rgba(96,165,250,.10); color:var(--info);}
+.vs-applied  {background:rgba(245,158,11,.10); color:var(--warn);}
+.vs-interview{background:rgba(168,85,247,.10); color:#a855f7;}
+.vs-offer    {background:rgba(74,222,128,.12); color:#4ade80; border:1px solid rgba(74,222,128,.2);}
+.vs-rejected {background:rgba(239,68,68,.10);  color:var(--err);}
+.vs-ghosted  {background:rgba(156,163,175,.10);color:var(--t2);}
+.vs-removed  {background:rgba(107,114,128,.10);color:var(--t3);}
+
+.vcard-actions{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0;}
+.vcard-select{
+  background:var(--surf);border:1px solid var(--bord);
+  color:var(--t2);border-radius:var(--rs);
+  padding:5px 8px;font-family:var(--mono);font-size:10px;
+  cursor:pointer;outline:none;transition:border-color .15s;
+  min-width:110px;
+}
+.vcard-select:focus{border-color:rgba(232,145,58,.4);}
+.vcard-select option{background:var(--card);}
+
+.vhist-item{
+  font-family:var(--mono);font-size:8.5px;color:var(--t3);
+  padding:2px 0;border-bottom:1px solid rgba(28,35,55,.4);
+}
+.vhist-item:last-child{border-bottom:none;}
+
+.vnote-input{
+  flex:1;min-width:0;
+  background:var(--surf);border:1px solid var(--bord);
+  color:var(--t1);border-radius:var(--rs);
+  padding:6px 10px;font-size:11px;font-family:var(--sans);
+  resize:vertical;outline:none;transition:border-color .15s;
+}
+.vnote-input:focus{border-color:rgba(232,145,58,.4);}
+</style>
+
+<script>
+(function(){
+  const API = window.API || 'http://localhost:8000';
+  const UID = window.UID || 1;
+  let vaultData = [];
+  let currentStatus = 'all';
+
+  const STATUS_CLASS = {
+    active:'vs-active', saved:'vs-saved', applied:'vs-applied',
+    interview:'vs-interview', offer:'vs-offer', rejected:'vs-rejected',
+    ghosted:'vs-ghosted', removed:'vs-removed'
+  };
+  const STATUS_OPTS = [
+    {v:'active',l:'Active'},{v:'saved',l:'Saved'},{v:'applied',l:'Applied'},
+    {v:'interview',l:'Interview'},{v:'offer',l:'Offer'},
+    {v:'rejected',l:'Rejected'},{v:'ghosted',l:'Ghosted'},{v:'removed',l:'Removed'},
+  ];
+
+  async function loadVault(status){
+    currentStatus = status || 'all';
+    const url = API+'/api/vault?user_id='+UID+(currentStatus && currentStatus!=='all'?'&status='+currentStatus:'');
+    try {
+      const r = await fetch(url);
+      const d = await r.json();
+      vaultData = d.jobs || [];
+      renderTabs(d.counts || {});
+      renderGrid(vaultData);
+      updateNavBadge(d.counts || {});
+    } catch(e) {
+      document.getElementById('vault-grid').innerHTML =
+        '<div style="text-align:center;color:var(--err);padding:40px;font-family:var(--mono);font-size:11px">Failed to load vault: '+e.message+'</div>';
+    }
+  }
+
+  function updateNavBadge(counts){
+    const badge = document.getElementById('vault-cnt');
+    if(!badge) return;
+    const total = counts.all || 0;
+    if(total > 0){ badge.textContent = total; badge.style.display=''; }
+    else { badge.style.display='none'; }
+  }
+
+  function renderTabs(counts){
+    const tabs = document.getElementById('vault-tabs');
+    const all = [
+      {v:'all', l:'All', n: counts.all||0},
+      ...STATUS_OPTS.map(o=>({v:o.v, l:o.l, n:counts[o.v]||0}))
+    ];
+    tabs.innerHTML = all.map(t=>`
+      <div class="vtab${t.v===currentStatus?' active':''}" onclick="vaultTab('${t.v}')">
+        ${t.l}<span class="vcnt"> ${t.n}</span>
+      </div>
+    `).join('');
+  }
+
+  function renderGrid(jobs){
+    const grid = document.getElementById('vault-grid');
+    const q = (document.getElementById('vault-search')||{}).value||'';
+    const filtered = q ? jobs.filter(j=>{
+      const h = (j.title+' '+j.company+' '+j.location).toLowerCase();
+      return h.includes(q.toLowerCase());
+    }) : jobs;
+
+    if(!filtered.length){
+      grid.innerHTML='<div class="empty"><div class="et">No jobs found for this filter.</div></div>';
+      return;
+    }
+    grid.innerHTML = filtered.map((j,i)=>jobCard(j,i)).join('');
+  }
+
+  function jobCard(j,i){
+    const sc = STATUS_CLASS[j.discovery_status] || 'vs-active';
+    const initial = (j.company||'?').charAt(0).toUpperCase();
+    const hist = (j.status_history||[]).slice(-3).reverse().map(h=>`
+      <div class="vhist-item">${esc(h.from)} → ${esc(h.to)} · ${(h.at||'').slice(0,10)}${h.notes?' · '+esc(h.notes):''}</div>
+    `).join('');
+    const opts = STATUS_OPTS.map(o=>`<option value="${o.v}"${o.v===j.discovery_status?' selected':''}>${o.l}</option>`).join('');
+    return `
+    <div class="vcard" id="vc-${j.id}" style="animation-delay:${Math.min(i*.04,.3)}s">
+      <div class="vcard-logo">${initial}</div>
+      <div class="vcard-body">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+          <span class="vcard-title">${esc(j.title||'Untitled')}</span>
+          <span class="vstatus ${sc}">${esc(j.status_label||j.discovery_status||'')}</span>
+          ${j.match?`<span style="font-family:var(--mono);font-size:9px;color:var(--acc)">Match ${esc(j.match)}</span>`:''}
+          ${j.salary&&j.salary!=='Not listed'?`<span style="font-family:var(--mono);font-size:9px;color:var(--t3)">${esc(j.salary)}</span>`:''}
+        </div>
+        <div class="vcard-meta" style="margin-bottom:6px">
+          ${esc(j.company||'')}${j.location?' · '+esc(j.location):''}${j.source?` · <span style="color:var(--acc)">${esc(j.source)}</span>`:''}${j.saved_at?` · Found ${(j.saved_at||'').slice(0,10)}`:''}
+        </div>
+        ${hist?`<div style="margin-bottom:8px">${hist}</div>`:''}
+        ${j.notes?`<div style="font-size:11px;color:var(--t2);margin-bottom:8px;font-style:italic">${esc(j.notes)}</div>`:''}
+        <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap">
+          <textarea class="vnote-input" id="note-${j.id}" placeholder="Add notes…" rows="1">${esc(j.notes||'')}</textarea>
+          <div style="display:flex;gap:6px;flex-shrink:0;padding-top:1px">
+            <button class="btn bsec bsm" onclick="saveNote('${j.id}')">Save</button>
+            ${j.url?`<a href="${j.url}" target="_blank" class="btn bpri bsm" style="text-decoration:none">Apply ↗</a>`:''}
+          </div>
+        </div>
+      </div>
+      <div class="vcard-actions">
+        <select class="vcard-select" onchange="updateVaultStatus('${j.id}',this.value)">${opts}</select>
+      </div>
+    </div>`;
+  }
+
+  function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  window.vaultTab = function(status){
+    currentStatus = status;
+    window.currentVaultStatus = status;
+    loadVault(status);
+  };
+
+  window.filterVaultLocal = function(){
+    renderGrid(vaultData);
+  };
+
+  window.updateVaultStatus = async function(jobId, status){
+    const note = (document.getElementById('note-'+jobId)||{}).value||'';
+    try {
+      const r = await fetch(API+'/api/vault/'+jobId+'/status',{
+        method:'PUT',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({status, notes:note, user_id:UID})
+      });
+      if(r.ok){ loadVault(currentStatus); }
+      else { alert('Failed to update status'); }
+    } catch(e){ alert('Error: '+e.message); }
+  };
+
+  window.saveNote = async function(jobId){
+    const note = (document.getElementById('note-'+jobId)||{}).value||'';
+    try {
+      await fetch(API+'/api/vault/'+jobId+'/notes',{
+        method:'PUT',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({notes:note, user_id:UID})
+      });
+    } catch(e){ console.error(e); }
+  };
+
+  loadVault('all');
+})();
+</script>

@@ -215,7 +215,10 @@ def _normalize_job_type(value: str) -> str:
     mapping = {
         "full-time": "Full Time",
         "fulltime": "Full Time",
+        "full-time-employment": "Full Time",
         "contract": "Contract",
+        "contractor": "Contract",       # JSearch returns "CONTRACTOR"
+        "parttime": "Part Time",
         "part-time": "Part Time",
         "freelance": "Freelance",
         "internship": "Internship",
@@ -375,40 +378,95 @@ def _normalize_jsearch_for_ui(raw: Dict[str, Any], keyword: str) -> Optional[Dic
     }
 
 
+# Keyword → related queries to run in parallel for broader platform coverage.
+# Each keyword costs 3 pages × 1 API call = 3 credits. Related queries
+# are only run if the primary keyword vault check passes (i.e. force=True).
+KEYWORD_EXPANSIONS: Dict[str, List[str]] = {
+    "devops":       ["DevOps Engineer", "Site Reliability Engineer", "Platform Engineer"],
+    "sre":          ["Site Reliability Engineer", "DevOps Engineer", "Infrastructure Engineer"],
+    "platform":     ["Platform Engineer", "DevOps Engineer", "Cloud Infrastructure Engineer"],
+    "cloud":        ["Cloud Engineer", "AWS Engineer", "Azure Engineer"],
+    "kubernetes":   ["Kubernetes Engineer", "DevOps Engineer", "Container Platform Engineer"],
+    "infrastructure":["Infrastructure Engineer", "DevOps Engineer", "Systems Engineer"],
+}
+
+def _expand_keyword(keyword: str) -> List[str]:
+    """Return the primary + any related queries for a keyword."""
+    kw_lower = keyword.strip().lower()
+    for trigger, queries in KEYWORD_EXPANSIONS.items():
+        if trigger in kw_lower:
+            # Put the exact user keyword first, then related ones
+            all_q = [keyword] + [q for q in queries if q.lower() != kw_lower]
+            return list(dict.fromkeys(all_q))  # dedupe preserving order
+    return [keyword]
+
+
 async def _fetch_jsearch_jobs_for_ui(
     db: Session,
     keyword: str,
     location: str,
     work_type: str,
     job_type: str,
+    force: bool = False,
+    known_urls: set = None,
 ) -> List[Dict[str, Any]]:
+    """
+    Fetch jobs from JSearch across all platforms (Indeed, LinkedIn, Glassdoor,
+    ZipRecruiter, Google Jobs, Monster). Automatically expands keyword to
+    related queries. Filters out any URL already in known_urls (vault) so only
+    brand-new jobs the user hasn't seen before are returned.
+    """
     if not settings.jsearch_api_key:
         return []
 
+    if known_urls is None:
+        known_urls = set()
+
     agent = JobDiscoveryAgent(db)
-    raw_jobs = await agent.search_jobs(
-        query=keyword,
-        location=_api_location(location),
-        num_pages=1,
-        date_posted="week",
-        remote_only=(work_type == "remote"),
-        employment_types=_jsearch_employment_types(job_type),
-    )
-    if not raw_jobs and (job_type or "").lower() not in ("", "all"):
-        logger.info(f"JSearch returned no {job_type} jobs; retrying all employment types")
+    loc = _api_location(location)
+    emp_types = "FULLTIME,CONTRACTOR,PARTTIME"
+    remote_only = (work_type == "remote")
+
+    # Expand keyword for broader coverage across roles/platforms
+    queries = _expand_keyword(keyword)
+    all_raw: List[Dict] = []
+    seen_ids: set = set()
+
+    for q in queries:
         raw_jobs = await agent.search_jobs(
-            query=keyword,
-            location=_api_location(location),
-            num_pages=1,
-            date_posted="week",
-            remote_only=(work_type == "remote"),
-            employment_types="FULLTIME,CONTRACTOR",
+            query=q,
+            location=loc,
+            num_pages=3,
+            date_posted="month",
+            remote_only=remote_only,
+            employment_types=emp_types,
+            force=force,
         )
+        for job in raw_jobs:
+            # Dedupe within this batch by job_id / apply_link
+            jid = job.get("job_id") or job.get("job_apply_link") or ""
+            if jid and jid in seen_ids:
+                continue
+            if jid:
+                seen_ids.add(jid)
+            # Skip jobs already in the vault (any status)
+            apply_url = (job.get("job_apply_link") or "").strip().lower()
+            if apply_url and apply_url in known_urls:
+                continue
+            all_raw.append(job)
+
     jobs = []
-    for raw in raw_jobs:
+    for raw in all_raw:
         normalized = _normalize_jsearch_for_ui(raw, keyword)
         if normalized:
             jobs.append(normalized)
+
+    new_count = len(jobs)
+    total_fetched = len(all_raw) + sum(1 for _ in known_urls)  # approx
+    logger.info(
+        f"JSearch: {new_count} NEW jobs for '{keyword}' "
+        f"across {len(queries)} queries — {len(known_urls)} already-seen jobs skipped"
+    )
     return jobs
 
 
@@ -445,20 +503,21 @@ def _fetch_remotive_jobs(
         searchable = f"{item.get('title', '')} {description} {' '.join(tags)}".lower()
         
         passes_keyword = False
-        if not expanded_term_words or not any(expanded_term_words):
+        if not expanded_terms:
             passes_keyword = True
         else:
-            for words in expanded_term_words:
-                if words and all(w in searchable for w in words):
+            for term in expanded_terms:
+                if term.lower() in searchable:
                     passes_keyword = True
                     break
                     
         if not passes_keyword:
             continue
-        # Strict US-or-global filter (replaces old _passes_us_location)
-        if not _is_us_or_global(candidate_location):
+        if not _passes_us_location(candidate_location, location):
             continue
-        if not _passes_job_type(raw_job_type, job_type):
+        # Remotive tags: "full_time", "contract" etc. Relax for contract since
+        # many remote tech roles skip the tag entirely.
+        if raw_job_type and not _passes_job_type(raw_job_type, job_type if job_type not in ("contract",) else "all"):
             continue
         if not _passes_salary(salary, salary_min):
             continue
@@ -519,11 +578,11 @@ def _fetch_arbeitnow_jobs(
         searchable = f"{title} {description} {' '.join(tags)}".lower()
         
         passes_keyword = False
-        if not expanded_term_words or not any(expanded_term_words):
+        if not expanded_terms:
             passes_keyword = True
         else:
-            for words in expanded_term_words:
-                if words and all(w in searchable for w in words):
+            for term in expanded_terms:
+                if term.lower() in searchable:
                     passes_keyword = True
                     break
                     
@@ -539,13 +598,15 @@ def _fetch_arbeitnow_jobs(
             continue
 
         candidate_location = item.get("location") or ("Remote" if is_remote else "")
-        # Strict US-or-global filter
-        if not _is_us_or_global(candidate_location):
+        if not _passes_us_location(candidate_location, location):
             continue
 
         raw_types = item.get("job_types") or []
         raw_job_type = raw_types[0] if raw_types else ""
-        if not _passes_job_type(raw_job_type, job_type):
+        # Arbeitnow uses "full_time" internally — don't hard-filter on contract/part-time
+        # because most Arbeitnow jobs simply lack a "contract" tag even when relevant.
+        # Only filter if the provider explicitly marks it as a conflicting type.
+        if raw_job_type and not _passes_job_type(raw_job_type, job_type if job_type not in ("contract",) else "all"):
             continue
         if not _passes_salary("", salary_min):
             continue
@@ -721,16 +782,26 @@ async def search_jobs_api(
             "source": source_value,
         }
         search_key = discovery_store.search_key(search_params)
+
+        # ── Load known URLs for job-level dedup ─────────────────────────────
+        # We always search (to find NEW jobs), but filter out any job whose URL
+        # is already stored in the vault — regardless of its status (active,
+        # removed, applied, etc.). This means the discovery page shows only
+        # jobs the user has never seen before.
+        known_urls = discovery_store.get_known_urls(user_id=user_id)
+
+        # Exact-match cache: same filters already searched → show active vault jobs
         if not force and discovery_store.has_search(search_key, user_id=user_id):
-            saved_jobs = discovery_store.list_jobs(user_id=user_id)
+            active_jobs = discovery_store.list_jobs(user_id=user_id)
             return {
-                "jobs": saved_jobs,
+                "jobs": active_jobs,
                 "success": True,
-                "total": len(saved_jobs),
+                "new_count": 0,
+                "total": len(active_jobs),
                 "is_live": False,
                 "from_cache": True,
                 "sources": ["Saved inbox"],
-                "message": "Loaded saved Job Discovery results. Use Refresh Search to call job providers again.",
+                "message": "Showing your active jobs. Hit Refresh Search to check for new listings from Indeed / LinkedIn / Glassdoor.",
             }
 
         providers = []
@@ -749,6 +820,8 @@ async def search_jobs_api(
                     provider_errors.append(f"{provider_name}: {exc}")
                     logger.warning(f"Live job provider failed ({provider_name}): {exc}")
 
+        # JSearch is paid — only used when explicitly selected in the source dropdown
+
         should_try_jsearch = source_value == "jsearch"
         if should_try_jsearch:
             try:
@@ -758,47 +831,70 @@ async def search_jobs_api(
                     location=location,
                     work_type=work_type or "all",
                     job_type=job_type or "all",
+                    force=force,
+                    known_urls=known_urls,   # filter out already-seen jobs
                 )
                 jobs.extend(jsearch_jobs)
-                if source_value == "jsearch":
-                    providers.append(("JSearch", _fetch_jsearch_jobs_for_ui))
-                elif jsearch_jobs:
-                    providers.append(("JSearch fallback", _fetch_jsearch_jobs_for_ui))
+                providers.append(("JSearch (Indeed/LinkedIn/Glassdoor)", None))
             except UsageLimitExceeded:
                 raise
             except Exception as exc:
                 provider_errors.append(f"JSearch: {exc}")
-                logger.warning(f"JSearch fallback failed: {exc}")
+                logger.warning(f"JSearch failed: {exc}")
 
-        seen_urls = set()
-        unique_jobs = []
+        # ── Separate NEW jobs from already-known ones ────────────────────────
+        # New = not in vault at all. Mark them so the UI can highlight them.
+        # Old active = already in vault with status "active" (not removed/applied).
+        seen_urls_this_batch: set = set()
+        new_jobs: List[Dict[str, Any]] = []
         for job in jobs:
             url = job.get("url")
-            if not url or url in seen_urls:
+            if not url or url in seen_urls_this_batch:
                 continue
-            seen_urls.add(url)
-            unique_jobs.append(job)
+            seen_urls_this_batch.add(url)
+            if (url.strip().lower()) in known_urls:
+                continue  # already in vault — will be shown below as "existing"
+            job["is_new"] = True   # flag for frontend "NEW" badge
+            new_jobs.append(job)
 
-        unique_jobs.sort(key=lambda item: int(str(item.get("match", "0")).rstrip("%")), reverse=True)
-        limited_jobs = unique_jobs[:25]
+        # Sort new jobs by match score desc
+        new_jobs.sort(key=lambda j: int(str(j.get("match", "0")).rstrip("%")), reverse=True)
 
+        # Save the new jobs to vault
+        if new_jobs:
+            discovery_store.save_search(
+                search_key=search_key,
+                params=search_params,
+                jobs=new_jobs,
+                user_id=user_id,
+                keyword=keyword,
+            )
+
+        # Load all active vault jobs (new ones just saved + previously active ones)
+        # They come back sorted by last_seen_at desc, so newly saved ones are first.
+        active_vault_jobs = discovery_store.list_jobs(user_id=user_id)
+
+        # Tag which ones are freshly new in this response so UI can style them
+        new_urls = {j.get("url", "").strip().lower() for j in new_jobs}
+        for job in active_vault_jobs:
+            if (job.get("url") or "").strip().lower() in new_urls:
+                job["is_new"] = True
+
+        new_count = len(new_jobs)
+        total_active = len(active_vault_jobs)
         message = None
-        if not limited_jobs:
-            message = "No real jobs matched these filters. Try All Types, Full Time, or broader keywords."
+        if new_count == 0 and total_active == 0:
+            message = "No jobs found. Try broader keywords or a different source."
             if provider_errors:
-                message += " Live provider errors: " + "; ".join(provider_errors)
-
-        saved_jobs = discovery_store.save_search(
-            search_key=search_key,
-            params=search_params,
-            jobs=limited_jobs,
-            user_id=user_id,
-        )
+                message += " Errors: " + "; ".join(provider_errors)
+        elif new_count == 0:
+            message = f"No new listings found — showing your {total_active} active jobs. Refresh Search to check for brand-new postings."
 
         return {
-            "jobs": saved_jobs,
+            "jobs": active_vault_jobs,
             "success": True,
-            "total": len(saved_jobs),
+            "new_count": new_count,
+            "total": total_active,
             "is_live": True,
             "from_cache": False,
             "sources": [name for name, _ in providers],
@@ -817,7 +913,7 @@ async def get_job(
     job_id: int,
     db: Session = Depends(get_db),
 ) -> Dict[str, Any]:
-    """Get job details"""
+    """Get job details by DB id"""
     try:
         job_agent = JobAnalysisAgent(db)
         job = job_agent.get_job(job_id)

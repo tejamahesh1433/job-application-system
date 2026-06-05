@@ -1,18 +1,42 @@
 const API='http://localhost:8000', UID=1;
+window.API = API; window.UID = UID;
 let allCache=[], appliedUrls=new Set(), jobsStore={}, docStore=[], docActive='all', docSelected=null;
+
+/* ── Re-execute <script> blocks injected via innerHTML ─────────────────── */
+function _execScripts(el){
+  el.querySelectorAll('script').forEach(old=>{
+    const s=document.createElement('script');
+    s.textContent=old.textContent;
+    old.parentNode.replaceChild(s,old);
+  });
+}
+
+/* ── Credentials page init ─────────────────────────────────────────────── */
+async function lcredentials(){
+  // Auto-seed from profile on first load if no credentials exist yet
+  try{
+    const r=await fetch(API+'/api/credentials?user_id='+UID);
+    const d=await r.json();
+    if((d.credentials||[]).length===0){
+      await fetch(API+'/api/credentials/seed-from-profile?user_id='+UID,{method:'POST'});
+    }
+  }catch(e){}
+}
 
 /* ─── routing ─── */
 function sp(name,navEl){
+  if(window.location.hash !== '#' + name) {
+    window.history.pushState(null, '', '#' + name);
+  }
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   
   const pg=g('page-'+name);
   if(pg){
-    // check if it's empty
     if(pg.innerHTML.trim() === '') {
-       // load it synchronously or handle promise, but since it's a simple app, we can fetch
        fetch(`views/${name}.html`).then(r=>r.text()).then(html=>{
          pg.innerHTML = html;
+         _execScripts(pg);   // re-run <script> tags (innerHTML blocks execution)
          if(name==='apps') lapps();
          if(name==='profile') lprof();
          if(name==='analytics') icharts();
@@ -20,15 +44,20 @@ function sp(name,navEl){
          if(name==='settings') lsettings();
          if(name==='discover') { g('j-loc').value='Anywhere in USA'; loadSavedJobs(); }
          if(name==='overview') { ldash(); aqnim(); }
+         if(name==='vault') loadVaultBadge();
+         if(name==='credentials') lcredentials();
        }).catch(e=>console.error('Failed to load view:', e));
     } else {
        if(name==='apps') lapps();
        if(name==='profile') lprof();
-       if(name==='analytics') icharts();
+       if(name==='analytics') { chReady=false; icharts(); }
        if(name==='documents') ldocs();
-       if(name==='settings') lsettings();
+       if(name==='settings') { if(llmData) renderSettings(llmData); else lsettings(); }
        if(name==='discover') { g('j-loc').value='Anywhere in USA'; loadSavedJobs(); }
        if(name==='overview') { ldash(); aqnim(); }
+       if(name==='vault') { if(typeof window.vaultTab==='function') window.vaultTab(window.currentVaultStatus || 'all'); else loadVaultBadge(); }
+       if(name==='credentials') { lcredentials(); if(typeof window.loadCredentialsTab==='function') window.loadCredentialsTab(); }
+       if(name==='form-records') { if(typeof window.loadFormRecordsTab==='function') window.loadFormRecordsTab(); }
     }
     pg.classList.add('active');
   }
@@ -129,7 +158,7 @@ async function searchJobs(force=false){
     if(!r.ok) throw new Error('API returned '+r.status);
     const data=await r.json();
     const elapsed=((Date.now()-t0)/1000).toFixed(1);
-    renderJobs(data.jobs||[], data.sources||[], elapsed, data.message, data.from_cache);
+    renderJobs(data.jobs||[], data.sources||[], elapsed, data.message, data.from_cache, data.new_count||0);
   }catch(e){
     g('jobs-grid').style.display='none';
     g('jd-empty').innerHTML=`
@@ -156,7 +185,7 @@ async function loadSavedJobs(silent=false){
   }
 }
 
-function renderJobs(jobs, sources, elapsed, message, fromCache=false){
+function renderJobs(jobs, sources, elapsed, message, fromCache=false, newCount=0){
   const grid=g('jobs-grid'), status=g('jd-status');
 
   if(!jobs.length){
@@ -170,8 +199,9 @@ function renderJobs(jobs, sources, elapsed, message, fromCache=false){
   }
 
   g('jd-empty').style.display='none';
-  g('jd-count').textContent=`${jobs.length} saved jobs`;
-  g('jd-sources').textContent=fromCache ? 'saved backend inbox — no new search credits used' : `via ${(sources||[]).join(', ')||'live sources'}`;
+  const newLabel = newCount > 0 ? ` · <span style="color:#22c55e;font-weight:600">${newCount} new</span>` : '';
+  g('jd-count').innerHTML=`${jobs.length} jobs${newLabel}`;
+  g('jd-sources').textContent=fromCache ? 'saved inbox — no API credits used' : `via ${(sources||[]).join(', ')||'live sources'}`;
   g('jd-time').textContent=elapsed==='saved' ? 'saved' : `${elapsed}s`;
   status.style.display='flex';
 
@@ -195,11 +225,15 @@ function jobCard(job, idx){
 
   const matchColor=scoreNum>=85?'var(--ok)':scoreNum>=70?'var(--lime)':scoreNum>=50?'var(--warn)':'var(--err)';
 
-  return `<div class="jcard${alreadyApplied?' applied-ok':''}" style="animation-delay:${delay}s" id="jc-${idx}">
+  const isNew = job.is_new === true;
+  return `<div class="jcard${alreadyApplied?' applied-ok':''}${isNew?' jcard-new':''}" style="animation-delay:${delay}s" id="jc-${idx}">
   <div class="jcard-hd">
     <div class="jcard-logo">${esc(co)}</div>
     <div class="jcard-info">
-      <div class="jcard-title">${esc(job.title||'Untitled Role')}</div>
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+        <div class="jcard-title">${esc(job.title||'Untitled Role')}</div>
+        ${isNew?'<span style="background:rgba(34,197,94,.18);color:#22c55e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:8px;letter-spacing:.05em">NEW</span>':''}
+      </div>
       <div class="jcard-company">${esc(job.company||'Unknown Company')}</div>
       <div class="jcard-meta">${esc(job.location||'Remote')} · ${esc(job.work_type||'Remote')} · ${esc(job.job_type||'Full Time')}</div>
     </div>
@@ -399,17 +433,32 @@ async function selectDoc(i){
   g('dp-title').textContent=title;
   g('dp-meta').textContent=`${d.company||'Unassigned'} · ${d.job_title||docLabel(d.category)} · ${fmtDate(d.modified_at)}`;
   g('dp-type').textContent=docLabel(d.category).toUpperCase();
-  g('dp-down').href=d.download_url;
+  g('dp-down').href=(d.download_url.startsWith('http')?'':API)+d.download_url;
   const body=g('dp-body');
+  const iframe=g('dp-iframe');
+  const ext=(d.extension||'').toLowerCase();
+  const editable=['txt','json','md','csv'].includes(ext);
+  
+  if(iframe){ iframe.style.display='none'; iframe.src=''; }
+  body.style.display='block';
   body.value='';
-  const editable=['txt','json','md','csv'].includes((d.extension||'').toLowerCase());
   g('dp-save').disabled=!editable;
+  
+  if(ext==='pdf'){
+    body.style.display='none';
+    if(iframe){
+      iframe.style.display='block';
+      iframe.src=(d.view_url.startsWith('http')?'':API)+d.view_url;
+    }
+    return;
+  }
+  
   if(!editable){
     body.value='Preview is not available for this file type. Use Download to open it.';
     return;
   }
   try{
-    const r=await fetch(d.view_url);
+    const r=await fetch((d.view_url.startsWith('http')?'':API)+d.view_url);
     if(!r.ok) throw new Error('Preview unavailable');
     body.value=await r.text();
   }catch(e){ body.value=e.message; }
@@ -614,7 +663,9 @@ async function lprof(){
 function rprof(p){
   const ini=(p.name||'U').split(' ').map(w=>w[0]).join('').substring(0,1).toUpperCase();
   const nm=p.name||'Unknown', tl=p.current_title||'—';
-  g('mav').textContent=ini; g('mnm').textContent=nm; g('mtl').textContent=tl;
+  if(g('mav')) g('mav').textContent=ini; 
+  if(g('mnm')) g('mnm').textContent=nm; 
+  if(g('mtl')) g('mtl').textContent=tl;
     if(g('plav')){
       g('plav').textContent=ini; g('pnm').textContent=nm; g('ptl').textContent=tl;
       g('plc').textContent=p.location||'—'; g('pexp').textContent=p.years_experience!==null?p.years_experience:0;
@@ -628,11 +679,12 @@ function rprof(p){
     }
   const fs=[p.name,p.email,p.current_title,p.phone,p.location,Object.keys(p.certifications||{}).length?1:null,p.github_profile,p.linkedin_profile];
   const cp=Math.round((fs.filter(Boolean).length/fs.length)*100);
-  g('mcp').textContent=cp+'%'; setTimeout(()=>{g('mcpb').style.width=cp+'%';},80);
+  if(g('mcp')) g('mcp').textContent=cp+'%'; 
+  if(g('mcpb')) setTimeout(()=>{g('mcpb').style.width=cp+'%';},80);
   if(g('pcpp')){g('pcpp').textContent=cp+'%';setTimeout(()=>{g('pcpb').style.width=cp+'%';},80);}
   const sk=p.skills||{};
   const t8=Object.entries(sk).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  g('msk').innerHTML=t8.length?t8.map(([k,v])=>`<span class="skt${v>=7?' top':''}">${esc(k)}</span>`).join(''):`<span class="skt" style="color:var(--t3)">No skills</span>`;
+  if(g('msk')) g('msk').innerHTML=t8.length?t8.map(([k,v])=>`<span class="skt${v>=7?' top':''}">${esc(k)}</span>`).join(''):`<span class="skt" style="color:var(--t3)">No skills</span>`;
   if(g('pskd')) g('pskd').innerHTML=Object.entries(sk).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span class="skt${v>=7?' top':''}">${esc(k)} <span style="opacity:.45">${v}/10</span></span>`).join('')||`<span class="skt" style="color:var(--t3)">No skills</span>`;
 }
 
@@ -653,7 +705,12 @@ async function sprof(){
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(pl)
     });
-    if(r.ok){toast('Profile saved!','ok');lprof();}else throw 0;
+    if(r.ok){
+      toast('Profile saved!','ok');
+      lprof();
+      // Auto-sync credentials with updated profile data (email, name, phone, etc.)
+      fetch(API+'/api/credentials/seed-from-profile?user_id='+UID,{method:'POST'}).catch(()=>{});
+    }else throw 0;
   }catch{toast('Profile save failed — endpoint may not be wired yet','err');}
 }
 
@@ -663,7 +720,7 @@ async function upres(){
   toast(`Uploading ${file.name}...`,'info');
   try{
     const r=await fetch(`${API}/api/user/upload-resume-file?user_id=${UID}`,{method:'POST',body:fd});
-    if(r.ok) toast('Resume uploaded!','ok'); else throw 0;
+    if(r.ok){ toast('Resume uploaded and profile extracted!','ok'); lprof(); } else throw 0;
   }catch{toast('Upload failed — ensure backend is running','err');}
 }
 
@@ -725,19 +782,53 @@ function cform(){g('jurl').value='';g('jcont').value='';g('rp').classList.remove
 
 /* ─── charts ─── */
 let chReady=false;
-function icharts(){
+async function icharts(){
   if(chReady) return; chReady=true;
+  
+  // Fetch real data
+  let apps=[];
+  try{
+    const r=await fetch(`${API}/api/applications/${UID}`);
+    if(r.ok){ const d=await r.json(); apps=d.applications||[]; }
+  }catch(e){}
+
+  // Compute 7-day trend
+  const dts=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);return d.toISOString().substring(0,10);});
+  const trend=dts.map(d=>apps.filter(a=>(a.submitted_at||a.created_at||'').startsWith(d)).length);
+  const dtl=dts.map(d=>new Date(d).toLocaleDateString('en-US',{weekday:'short'}));
+
+  // Compute status breakdown
+  const stCount={applied:0,reviewing:0,interview:0,offered:0,rejected:0};
+  apps.forEach(a=>{
+    const s=mst(a.status);
+    if(s==='submitted'||s==='pending') stCount.applied++;
+    else if(s==='interview') stCount.interview++;
+    else if(s==='offered') stCount.offered++;
+    else if(s==='rejected') stCount.rejected++;
+  });
+
+  // Compute match score distribution
+  const msc=[0,0,0,0]; // <50, 50-70, 70-85, 85-100
+  apps.forEach(a=>{
+    const s=a.match_score||0;
+    if(s<50) msc[0]++; else if(s<70) msc[1]++; else if(s<85) msc[2]++; else msc[3]++;
+  });
+
   Chart.defaults.color='#4A5568'; Chart.defaults.borderColor='rgba(28,35,55,.8)';
   Chart.defaults.font.family="'IBM Plex Mono',monospace"; Chart.defaults.font.size=10;
-  new Chart(g('cht').getContext('2d'),{type:'line',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Applications',data:[18,25,22,30,25,15,8],borderColor:'#E8913A',backgroundColor:'rgba(232,145,58,.06)',borderWidth:2,tension:.4,fill:true,pointBackgroundColor:'#E8913A',pointRadius:3,pointHoverRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(28,35,55,.6)'},ticks:{color:'#3D4D60'}},y:{grid:{color:'rgba(28,35,55,.6)'},ticks:{color:'#3D4D60'}}}}});
-  new Chart(g('chs').getContext('2d'),{type:'doughnut',data:{labels:['Applied','Reviewing','Interview','Offered','Rejected'],datasets:[{data:[18,10,12,2,5],backgroundColor:['#60A5FA','#F59E0B','#22C55E','#4ADE80','#EF4444'],borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:10,padding:12,color:'#7E8FA8',font:{size:9}}}},cutout:'65%'}});
-  new Chart(g('chm').getContext('2d'),{type:'bar',data:{labels:['< 50%','50–70%','70–85%','85–100%'],datasets:[{label:'Apps',data:[3,8,18,18],backgroundColor:['#EF4444','#F59E0B','#84CC16','#22C55E'],borderRadius:3,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#3D4D60'}},y:{grid:{color:'rgba(28,35,55,.6)'},ticks:{color:'#3D4D60'}}}}});
+  
+  new Chart(g('cht').getContext('2d'),{type:'line',data:{labels:dtl,datasets:[{label:'Applications',data:trend,borderColor:'#E8913A',backgroundColor:'rgba(232,145,58,.06)',borderWidth:2,tension:.4,fill:true,pointBackgroundColor:'#E8913A',pointRadius:3,pointHoverRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(28,35,55,.6)'},ticks:{color:'#3D4D60'}},y:{grid:{color:'rgba(28,35,55,.6)'},ticks:{color:'#3D4D60'},suggestedMax:5}}}});
+  new Chart(g('chs').getContext('2d'),{type:'doughnut',data:{labels:['Applied','Interview','Offered','Rejected'],datasets:[{data:[stCount.applied,stCount.interview,stCount.offered,stCount.rejected],backgroundColor:['#60A5FA','#22C55E','#4ADE80','#EF4444'],borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:10,padding:12,color:'#7E8FA8',font:{size:9}}}},cutout:'65%'}});
+  new Chart(g('chm').getContext('2d'),{type:'bar',data:{labels:['< 50%','50–70%','70–85%','85–100%'],datasets:[{label:'Apps',data:msc,backgroundColor:['#EF4444','#F59E0B','#84CC16','#22C55E'],borderRadius:3,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#3D4D60'}},y:{grid:{color:'rgba(28,35,55,.6)'},ticks:{color:'#3D4D60'},suggestedMax:5}}}});
+  
+  const avgMatch=apps.length?Math.round(apps.reduce((a,b)=>a+(b.match_score||0),0)/apps.length):0;
+  
   g('kpm').innerHTML=[
-    {l:'Avg time per application',v:'96 sec',n:'Goal: < 2 min'},
-    {l:'Cover letter quality',v:'89%',n:'AI scored'},
-    {l:'ATS keyword match',v:'88%',n:'Balanced mode'},
-    {l:'Daily API cost',v:'$0.70',n:'~$21/month'},
-    {l:'Hours saved this week',v:'12.4h',n:'vs manual'},
+    {l:'Total Applications',v:apps.length,n:'All time'},
+    {l:'Avg Match Score',v:avgMatch+'%',n:'Across all apps'},
+    {l:'Interviews Scheduled',v:stCount.interview,n:'Upcoming'},
+    {l:'Offers Received',v:stCount.offered,n:'Congratulations!'},
+    {l:'Response Rate',v:(apps.length?Math.round((stCount.interview+stCount.offered+stCount.rejected)/apps.length*100):0)+'%',n:'Heard back'},
   ].map(m=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(28,35,55,.4)"><div><div style="font-size:12px;color:var(--t1)">${m.l}</div><div style="font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:2px">${m.n}</div></div><div style="font-family:var(--serif);font-size:20px;font-weight:700;color:var(--acc)">${m.v}</div></div>`).join('');
 }
 
@@ -1079,10 +1170,45 @@ function copyCmd(el) {
 /* ─── init ─── */
 document.addEventListener('DOMContentLoaded',()=>{
   hcheck();
-  // the first sp call will fetch the HTML, then call ldash and aqnim automatically
-  sp('overview', document.querySelector('.ni[onclick*="sp(\\\'overview\\\'"]'));
-  // Enter key triggers search
-  g('j-kw').addEventListener('keydown',e=>{if(e.key==='Enter') searchJobs();});
+  
+  const hashPage = window.location.hash.substring(1);
+  const validPages = [
+    'overview', 'discover', 'apps', 'new', 'profile',
+    'analytics', 'documents', 'settings',
+    'vault', 'credentials', 'form-records',  // new pages
+  ];
+  const startPage = validPages.includes(hashPage) ? hashPage : 'overview';
+
+  const navEl = document.querySelector(`.ni[onclick*="sp('${startPage}'"]`) || document.querySelector('.ni[onclick*="sp(\'overview\'"]');
+  sp(startPage, navEl);
+
+  window.addEventListener('hashchange', () => {
+    const page = window.location.hash.substring(1);
+    if(validPages.includes(page)) {
+      const el = document.querySelector(`.ni[onclick*="sp('${page}'"]`);
+      sp(page, el);
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if(e.target && e.target.id === 'j-kw' && e.key === 'Enter') searchJobs();
+  });
+  
   setInterval(hcheck,30000);
-  setInterval(lsettings, 60000); // Refresh LLM status every 60s
+  setInterval(lsettings, 60000);
 });
+/* ─── vault badge ─── */
+async function loadVaultBadge(){
+  try{
+    const r = await fetch(API+'/api/vault/counts?user_id='+UID);
+    const d = await r.json();
+    const badge = document.getElementById('vault-cnt');
+    if(!badge) return;
+    const total = (d.counts||{}).all || 0;
+    if(total > 0){ badge.textContent=total; badge.style.display=''; }
+    else { badge.style.display='none'; }
+  }catch(e){}
+}
+// refresh vault badge on page load and every 60s
+loadVaultBadge();
+setInterval(loadVaultBadge, 60000);

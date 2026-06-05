@@ -77,7 +77,7 @@ async def get_llm_status() -> Dict[str, Any]:
     active_model = settings.ollama_model
 
     try:
-        r = req_lib.get(f"{settings.ollama_base_url}/api/tags", timeout=4)
+        r = req_lib.get(f"{settings.ollama_base_url}/api/tags", timeout=1.5)
         if r.ok:
             ollama_ok = True
             raw = r.json().get("models", [])

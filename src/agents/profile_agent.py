@@ -283,9 +283,9 @@ Return ONLY valid JSON with these keys:
 
         try:
             if path.suffix.lower() == ".pdf":
-                import PyPDF2
+                from pypdf import PdfReader
                 with open(path, "rb") as f:
-                    reader = PyPDF2.PdfReader(f)
+                    reader = PdfReader(f)
                     text = "\n".join(
                         page.extract_text() for page in reader.pages
                     )
